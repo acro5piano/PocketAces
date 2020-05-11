@@ -2,7 +2,7 @@
 
 An Experimental GrpahQL framework
 
-# Ieal Features
+# Features to build
 
 Main concept: Ruby on Rails for GraphQL apps.
 
