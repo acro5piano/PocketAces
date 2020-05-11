@@ -1,9 +1,8 @@
 import request from 'supertest'
 import anyTest, { TestInterface } from 'ava'
-import { Server } from 'http'
 
 export const test = anyTest.serial as TestInterface<{
-  server: Server
+  server: any
   graphql: ReturnType<typeof makeGraphql>
 }>
 
@@ -19,7 +18,7 @@ export type GraphQLResponse<T> = {
   data: T
 }
 
-export function makeGraphql(app: Server) {
+export function makeGraphql(app: any) {
   return async function graphql<T, V = any>({
     query,
     variables = undefined,

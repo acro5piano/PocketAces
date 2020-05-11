@@ -1,7 +1,8 @@
 import { test, makeGraphql } from './helper'
-import { createServer } from '../src/server'
+import http from '../src/services/HttpService'
 
 test.beforeEach(t => {
-  t.context.server = createServer().listen()
-  t.context.graphql = makeGraphql(t.context.server)
+  http.initialize()
+  t.context.server = http.server
+  t.context.graphql = makeGraphql(t.context.server.listen())
 })

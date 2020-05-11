@@ -4,7 +4,7 @@
   "main": "index.js",
   "license": "MIT",
   "scripts": {
-    "test": "ava",
+    "test": "ava --serial",
     "r": "node -r ts-node/register/transpile-only -r ./src/bootstrap",
     "e": "node -r ts-node/register/transpile-only -r ./src/bootstrap -pe"
   },

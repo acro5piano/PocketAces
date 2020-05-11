@@ -1,3 +1,4 @@
-import { createServer } from './server'
+import { HttpService } from './services/HttpService'
+import { Container } from 'typedi'
 
-createServer().listen(3000)
+Container.get(HttpService).initialize().start(3000)
