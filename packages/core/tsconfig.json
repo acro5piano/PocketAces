@@ -1,0 +1,54 @@
+{
+  "compilerOptions": {
+    /* Basic Options */
+    "target": "es5",
+    "declaration": false,
+    "sourceMap": true,
+    "inlineSources": true,
+    "removeComments": true,
+    "noLib": false,
+    "skipLibCheck": true,
+    "jsx": "react",
+    "types": ["@types/node"],
+    "lib": ["dom", "es2015", "es2016", "es2017", "es2018", "esnext"],
+    "keyofStringsOnly": true,
+
+    /* Strict Type-Checking Options */
+    "strict": true,
+    "noImplicitAny": true,
+    "strictNullChecks": true,
+    "strictFunctionTypes": true,
+    "strictPropertyInitialization": true,
+    "noImplicitThis": true,
+    // "alwaysStrict": true,
+
+    /* Additional Checks */
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "noImplicitReturns": true,
+    "noFallthroughCasesInSwitch": true,
+
+    /* Experimental Options */
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true,
+
+    /* Module Resolution Options */
+    "allowSyntheticDefaultImports": true,
+    "esModuleInterop": true,
+    "moduleResolution": "node",
+    "module": "commonjs",
+    "baseUrl": "./",
+    "allowJs": true,
+    "forceConsistentCasingInFileNames": true,
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "noEmit": true,
+    "outDir": "build"
+  },
+  "exclude": [
+    "**/node_modules/**",
+    "**/vendor/**",
+    ".git",
+    "**/__mocks__/*"
+  ]
+}
