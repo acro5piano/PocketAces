@@ -1,7 +1,10 @@
 import { test, gql, normGql } from '../helper'
 import { Schema } from '../../src/schema/Schema'
-import AllDirective from '../../src/directives/AllDirective'
-import WhereDirective from '../../src/directives/WhereDirective'
+// import AllDirective from '../../src/directives/AllDirective'
+// import WhereDirective from '../../src/directives/WhereDirective'
+
+import { DatabaseService } from '../../src/services/DatabaseService'
+import { Container } from 'typedi'
 
 const mockUsers = [
   {
@@ -26,10 +29,13 @@ const mockedDatabaseService = {
 }
 
 // TODO: failing Container.set in typedi so mock DB in this way
-Object.assign(AllDirective, { database: mockedDatabaseService })
-Object.assign(WhereDirective, { database: mockedDatabaseService })
+// Object.assign(AllDirective, { database: mockedDatabaseService })
+// Object.assign(WhereDirective, { database: mockedDatabaseService })
+
+// console.log(Container.get('database').db.table)
 
 test('schema#executeGraphQL', async t => {
+  Container.set(DatabaseService, mockedDatabaseService)
   const schema = new Schema()
 
   schema.registerResolver('health', () => 'ok')

@@ -1,4 +1,4 @@
-import { Container, Service, Inject } from 'typedi'
+import { Service, Inject } from 'typedi'
 import { DatabaseService } from '../services/DatabaseService'
 import { DirectiveContract } from '../contracts/DirectiveContract'
 
@@ -14,5 +14,3 @@ export class LogDirective implements DirectiveContract {
     return currentValue
   }
 }
-
-export default Container.get(LogDirective)

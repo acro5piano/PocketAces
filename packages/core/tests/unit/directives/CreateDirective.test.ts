@@ -1,11 +1,13 @@
+import '../../bootstrapServices'
 import { test, gql } from '../../helper'
 import { Schema } from '../../../src/schema/Schema'
-import DatabaseService from '../../../src/services/DatabaseService'
+import { DatabaseService } from '../../../src/services/DatabaseService'
+import { Container } from 'typedi'
 
 test('@create', async t => {
   const schema = new Schema()
 
-  await DatabaseService.db.raw(`
+  await Container.get(DatabaseService).db.raw(`
     create table users (
       id integer not null primary key autoincrement,
       name string not null default ''

@@ -1,4 +1,4 @@
-import { Container, Service } from 'typedi'
+import { Service } from 'typedi'
 import { Schema } from '../schema'
 import { Resolver } from '../schema/ResolverRegistry'
 
@@ -14,5 +14,3 @@ export class GraphQLService {
     this.schema.registerResolver(name, resolver)
   }
 }
-
-export default Container.get(GraphQLService)

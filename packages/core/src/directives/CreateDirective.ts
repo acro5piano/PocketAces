@@ -1,4 +1,4 @@
-import { Container, Service, Inject } from 'typedi'
+import { Service, Inject } from 'typedi'
 import { DatabaseService } from '../services/DatabaseService'
 import { DirectiveContract } from '../contracts/DirectiveContract'
 
@@ -15,5 +15,3 @@ export class CreateDirective implements DirectiveContract {
     return user
   }
 }
-
-export default Container.get(CreateDirective)

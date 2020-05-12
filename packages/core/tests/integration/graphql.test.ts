@@ -1,10 +1,12 @@
+import '../bootstrapServices'
 import { test, gql } from '../helper'
-import GraphQLService from '../../src/services/GraphQLService'
+import { Container } from 'typedi'
+import { GraphQLService } from '../../src/services/GraphQLService'
 
 test('graphql#health', async t => {
-  GraphQLService.registerResolver('health', () => 'ok')
+  Container.get(GraphQLService).registerResolver('health', () => 'ok')
 
-  GraphQLService.buildSchema(gql`
+  Container.get(GraphQLService).buildSchema(gql`
     type Query {
       health: String! @resolve
     }

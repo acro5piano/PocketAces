@@ -1,3 +1,4 @@
+import '../bootstrapServices'
 import request from 'supertest'
 import { test } from '../helper'
 

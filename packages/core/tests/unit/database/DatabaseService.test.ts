@@ -1,17 +1,20 @@
+import '../../bootstrapServices'
 import { test } from '../../helper'
-import DatabaseService from '../../../src/services/DatabaseService'
+import { Container } from 'typedi'
+import { DatabaseService } from '../../../src/services/DatabaseService'
 
 test('@create', async t => {
-  await DatabaseService.db.raw(`
+  const db = Container.get(DatabaseService).db
+  await db.raw(`
     create table users (
       id integer not null primary key autoincrement,
       name string not null default ''
     )
   `)
-  await DatabaseService.db.table('users').insert({
+  await db.table('users').insert({
     name: 'kazuya',
   })
-  const res = await DatabaseService.db
+  const res = await db
     .table('users')
     .where({
       name: 'kazuya',
