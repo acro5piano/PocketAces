@@ -24,7 +24,7 @@ export class HttpService {
     this.server.use(async (ctx, next) => {
       if (ctx.request.path === '/graphql' && ctx.request.method === 'POST') {
         const res = await graphql(
-          this.graphql.schema,
+          this.graphql.schema.schema,
           ctx.request.body.query,
           ctx.request.body.variables,
         )

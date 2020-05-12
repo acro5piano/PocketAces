@@ -8,6 +8,16 @@ export const test = anyTest.serial as TestInterface<{
 
 export const gql = (literal: TemplateStringsArray) => literal[0]
 
+export function normGql(query: string) {
+  return query
+    .replace(/\n/g, '')
+    .replace(/ +/g, ' ')
+    .replace(/^ /, '')
+    .replace(/ $/, '')
+    .replace(/ ?({|}|:|,) ?/g, '$1')
+    .replace(/\.\.\. /g, '...')
+}
+
 interface GraphqlArgument<V> {
   query: string
   variables?: V

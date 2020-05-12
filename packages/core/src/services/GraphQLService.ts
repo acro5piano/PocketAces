@@ -1,9 +1,13 @@
 import { Container, Service } from 'typedi'
-import { GraphQLSchema } from 'graphql'
+import { Schema } from '../schema'
 
 @Service()
 export class GraphQLService {
-  schema!: GraphQLSchema
+  schema = new Schema()
+
+  async buildSchema(schemaString: string) {
+    await this.schema.buildSchema(schemaString)
+  }
 }
 
 export default Container.get(GraphQLService)
