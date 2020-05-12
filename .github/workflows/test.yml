@@ -16,4 +16,5 @@ jobs:
           key: ${{ runner.os }}-${{ hashFiles('**/yarn.lock') }}
       - run: yarn install
       - run: yarn lerna bootstrap
-      - run: cd packages/core && yarn install && yarn tsc && yarn test
+      - run: yarn lerna run tsc
+      - run: yarn lerna run test
