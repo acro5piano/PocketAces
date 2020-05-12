@@ -30,7 +30,7 @@ test('@create', async t => {
     }
   `)
 
-  await schema.executeGraphQL({
+  const inline = await schema.executeGraphQL({
     query: gql`
       mutation CreateUser {
         createUser(name: "Yuta") {
@@ -40,6 +40,8 @@ test('@create', async t => {
       }
     `,
   })
+
+  t.truthy(inline?.data?.createUser)
 
   const create = await schema.executeGraphQL({
     query: gql`

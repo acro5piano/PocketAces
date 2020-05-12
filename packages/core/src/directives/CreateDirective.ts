@@ -9,8 +9,8 @@ export class CreateDirective implements DirectiveContract {
 
   name = 'create'
 
-  async resolveField({ operationArgs }: any) {
-    const [id] = await this.database.db('users').insert(operationArgs).returning('id')
+  async resolveField({ inputArgs }: any) {
+    const [id] = await this.database.db('users').insert(inputArgs).returning('id')
     const user = await this.database.db('users').where({ id }).first()
     return user
   }
