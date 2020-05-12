@@ -9,6 +9,7 @@
   "scripts": {
     "test": "ava --serial",
     "build": "rm -rf build && yarn rollup -c",
+    "prepublish": "yarn build",
     "r": "node -r ts-node/register/transpile-only -r tsconfig-paths/register -r ./src/bootstrap"
   },
   "dependencies": {
