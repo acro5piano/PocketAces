@@ -1,6 +1,6 @@
 import knex from 'knex'
-import { Container, Service } from 'typedi'
-import config from './ConfigService'
+import { Service, Inject } from 'typedi'
+import { ConfigService } from './ConfigService'
 
 const knexStringcase = require('knex-stringcase')
 const knexTinyLogger = require('knex-tiny-logger').default
@@ -9,11 +9,12 @@ const knexTinyLogger = require('knex-tiny-logger').default
 export class DatabaseService {
   db!: knex
 
+  @Inject()
+  config!: ConfigService
+
   init() {
-    const db = knex(knexStringcase(config.database))
+    const db = knex(knexStringcase(this.config.database))
     knexTinyLogger(db)
     this.db = db
   }
 }
-
-export default Container.get(DatabaseService)

@@ -1,7 +1,7 @@
 import Koa from 'koa'
 import bodyParser from 'koa-bodyparser'
 import { graphql } from 'graphql'
-import { Container, Service, Inject } from 'typedi'
+import { Service, Inject } from 'typedi'
 import { GraphQLService } from './GraphQLService'
 
 @Service()
@@ -41,5 +41,3 @@ export class HttpService {
     return this
   }
 }
-
-export default Container.get(HttpService)

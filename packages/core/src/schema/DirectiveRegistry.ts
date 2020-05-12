@@ -1,5 +1,6 @@
 import { DirectiveContract } from '../contracts/DirectiveContract'
 import { AllDirective } from '../directives/AllDirective'
+import { CreateDirective } from '../directives/CreateDirective'
 import { FindDirective } from '../directives/FindDirective'
 import { LogDirective } from '../directives/LogDirective'
 import { WhereDirective } from '../directives/WhereDirective'
@@ -9,7 +10,13 @@ export class DirectiveRegistry {
   private directives = new Map<string, DirectiveContract>()
 
   constructor() {
-    const builtinDirectives = [AllDirective, FindDirective, LogDirective, WhereDirective]
+    const builtinDirectives = [
+      AllDirective,
+      CreateDirective,
+      FindDirective,
+      LogDirective,
+      WhereDirective,
+    ]
     builtinDirectives.forEach(directive => {
       this.register(Container.get(directive))
     })

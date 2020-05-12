@@ -1,4 +1,4 @@
-import { Container, Service, Inject } from 'typedi'
+import { Service, Inject } from 'typedi'
 import { DatabaseService } from '../services/DatabaseService'
 import { DirectiveContract } from '../contracts/DirectiveContract'
 
@@ -9,9 +9,7 @@ export class FindDirective implements DirectiveContract {
 
   name = 'find'
 
-  resolveField() {
-    return this.database.db.table('users').first()
+  resolveField({ operationArgs }: any) {
+    return this.database.db.table('users').where({ id: operationArgs.id }).first()
   }
 }
-
-export default Container.get(FindDirective)

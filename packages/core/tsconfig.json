@@ -43,7 +43,11 @@
     "resolveJsonModule": true,
     "isolatedModules": true,
     "noEmit": true,
-    "outDir": "build"
+    "outDir": "build",
+    "paths": {
+      "src/*": ["./src/*"],
+      "tests/*": ["./tests/*"]
+    }
   },
   "exclude": [
     "**/node_modules/**",
