@@ -1,10 +1,10 @@
+![test](https://github.com/acro5piano/PocketAce/workflows/test/badge.svg)
+
 # PocketAce
 
 An Experimental GrpahQL framework
 
 # Features to build
-
-Main concept: Ruby on Rails for GraphQL apps.
 
 - **GraphQL First**: Built for making GraphQL server without hassle
 - **High Performance**: Efficient data loading by default
