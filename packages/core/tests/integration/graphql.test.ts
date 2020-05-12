@@ -1,22 +1,10 @@
 import { test, gql } from '../helper'
-import graphql from '../../src/services/GraphQLService'
-
-// graphql.schema = new GraphQLSchema({
-//   query: new GraphQLObjectType({
-//     name: 'RootQueryType',
-//     fields: {
-//       health: {
-//         type: GraphQLString,
-//         resolve() {
-//           return 'ok'
-//         },
-//       },
-//     },
-//   }),
-// })
+import GraphQLService from '../../src/services/GraphQLService'
 
 test('graphql#health', async t => {
-  graphql.buildSchema(gql`
+  GraphQLService.registerResolver('health', () => 'ok')
+
+  GraphQLService.buildSchema(gql`
     type Query {
       health: String! @resolve
     }
