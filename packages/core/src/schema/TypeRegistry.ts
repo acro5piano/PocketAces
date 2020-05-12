@@ -7,6 +7,10 @@ export class TypeRegistry {
     this.types.set(name, type)
   }
 
+  has(name: string) {
+    return this.types.has(name)
+  }
+
   get(name: string): GraphQLType {
     const maybeType = this.types.get(name)
     if (!maybeType) {

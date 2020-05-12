@@ -4,17 +4,25 @@ import {
   printSchema,
   // isObjectType,
   // isScalarType,
+  ObjectTypeDefinitionNode,
+  InputObjectTypeDefinitionNode,
+  FieldDefinitionNode,
   TypeNode,
   GraphQLType,
   GraphQLNonNull,
+  GraphQLFieldConfig,
+  GraphQLList,
   GraphQLSchema,
   GraphQLString,
   GraphQLID,
   GraphQLInt,
-  ObjectTypeDefinitionNode,
   GraphQLObjectType,
+  GraphQLInputObjectType,
 } from 'graphql'
 import { TypeRegistry } from './TypeRegistry'
+import { debug } from '../utils'
+
+type AnyGraphQLFieldConfig = GraphQLFieldConfig<any, any>
 
 export class Schema {
   private rawSchema?: GraphQLSchema
@@ -40,14 +48,20 @@ export class Schema {
 
     documentNode.definitions.forEach(definition => {
       switch (definition.kind) {
-        case 'ObjectTypeDefinition': {
+        case 'ObjectTypeDefinition':
           this.registerObjectType(definition)
-        }
+          break
+        case 'InputObjectTypeDefinition':
+          this.registerInputObjectType(definition)
+          break
       }
     })
 
     this.rawSchema = new GraphQLSchema({
       query: this.typeRegistry.get('Query') as GraphQLObjectType,
+      ...(this.typeRegistry.has('Mutation')
+        ? { mutation: this.typeRegistry.get('Mutation') as GraphQLObjectType }
+        : {}),
     })
   }
 
@@ -61,30 +75,77 @@ export class Schema {
     )
   }
 
-  private resolveFieldFunction(definition: ObjectTypeDefinitionNode) {
+  private registerInputObjectType(definition: InputObjectTypeDefinitionNode) {
+    this.typeRegistry.register(
+      definition.name.value,
+      new GraphQLInputObjectType({
+        name: definition.name.value,
+        fields: this.resolveInputObjectFieldFunction(definition),
+      }),
+    )
+  }
+
+  private resolveInputObjectFieldFunction(definition: InputObjectTypeDefinitionNode) {
     return () => {
       if (!definition.fields) {
         return {}
       }
 
-      const fields = definition.fields.reduce((fields, definition) => {
+      const fields = definition.fields.reduce((fields, def) => {
         return {
           ...fields,
-          [definition.name.value]: {
-            type: this.resolveDecoratedType(definition.type),
-            resolve() {
-              return 'ok'
-            },
-          },
+          [def.name.value]: {
+            type: this.resolveDecoratedType(def.type),
+          } as AnyGraphQLFieldConfig,
         }
       }, {})
       return fields
     }
   }
 
+  private resolveFieldFunction(definition: ObjectTypeDefinitionNode) {
+    return () => {
+      if (!definition.fields) {
+        return {}
+      }
+
+      const fields = definition.fields.reduce((fields, def) => {
+        return {
+          ...fields,
+          [def.name.value]: {
+            type: this.resolveDecoratedType(def.type),
+            args: this.resolveArguments(def),
+            resolve() {
+              return 'ok'
+            },
+          } as AnyGraphQLFieldConfig,
+        }
+      }, {})
+      return fields
+    }
+  }
+
+  private resolveArguments(definition: FieldDefinitionNode) {
+    if (!definition.arguments) {
+      return {}
+    }
+
+    return definition.arguments.reduce((args, arg) => {
+      return {
+        ...args,
+        [arg.name.value]: {
+          type: this.resolveDecoratedType(arg.type),
+        },
+      }
+    }, {})
+  }
+
   private resolveDecoratedType(type: TypeNode): GraphQLType {
     if (type.kind === 'NonNullType') {
       return new GraphQLNonNull(this.resolveDecoratedType(type.type))
+    }
+    if (type.kind === 'ListType') {
+      return new GraphQLList(this.resolveDecoratedType(type.type))
     }
     if (type.kind === 'NamedType') {
       if (type.name.value === 'String') {
@@ -96,7 +157,9 @@ export class Schema {
       if (type.name.value === 'ID') {
         return GraphQLID
       }
+      return this.typeRegistry.get(type.name.value)
     }
-    throw new Error(`${type.kind} cannot be resolved.`)
+    debug(type)
+    throw new Error(`${(type as any).kind} cannot be resolved.`)
   }
 }

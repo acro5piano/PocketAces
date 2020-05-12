@@ -6,11 +6,11 @@ test('schema#executeGraphQL', async t => {
 
   await schema.buildSchema(gql`
     type Query {
-      health: String! @resolve
+      health: String!
     }
 
     type Mutation {
-      createUser(input: UserInput!): User! @create
+      createUser(role: String!, input: UserInput!): User! @create
     }
 
     type User {
@@ -42,6 +42,25 @@ test('schema#executeGraphQL', async t => {
     normGql(gql`
       type Query {
         health: String!
+      }
+
+      type Mutation {
+        createUser(role: String!, input: UserInput!): User!
+      }
+
+      type User {
+        id: ID!
+        name: String!
+        posts: [Post!]!
+      }
+
+      type Post {
+        id: ID!
+        title: String!
+      }
+
+      input UserInput {
+        name: String!
       }
     `),
   )
