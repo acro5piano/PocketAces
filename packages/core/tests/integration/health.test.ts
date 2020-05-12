@@ -1,6 +1,6 @@
-import '../bootstrapServices'
+import 'tests/bootstrapServices'
 import request from 'supertest'
-import { test } from '../helper'
+import { test } from 'tests/helper'
 
 test('health', async t => {
   t.truthy(t.context.server)

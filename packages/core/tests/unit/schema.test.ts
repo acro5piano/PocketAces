@@ -1,9 +1,6 @@
-import { test, gql, normGql } from '../helper'
-import { Schema } from '../../src/schema/Schema'
-// import AllDirective from '../../src/directives/AllDirective'
-// import WhereDirective from '../../src/directives/WhereDirective'
-
-import { DatabaseService } from '../../src/services/DatabaseService'
+import { test, gql, normGql } from 'tests/helper'
+import { Schema } from 'src/schema/Schema'
+import { DatabaseService } from 'src/services/DatabaseService'
 import { Container } from 'typedi'
 
 const mockUsers = [

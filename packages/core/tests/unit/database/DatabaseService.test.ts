@@ -1,10 +1,11 @@
-import '../../bootstrapServices'
-import { test } from '../../helper'
+import 'tests/bootstrapServices'
+import { test } from 'tests/helper'
 import { Container } from 'typedi'
-import { DatabaseService } from '../../../src/services/DatabaseService'
+import { DatabaseService } from 'src/services/DatabaseService'
 
 test('@create', async t => {
   const db = Container.get(DatabaseService).db
+
   await db.raw(`
     create table users (
       id integer not null primary key autoincrement,

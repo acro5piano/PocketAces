@@ -15,3 +15,5 @@
 //
 // export default Container.get(AllDirective)
 //
+//
+export const a = 'a'

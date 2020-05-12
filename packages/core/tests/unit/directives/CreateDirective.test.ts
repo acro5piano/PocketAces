@@ -1,7 +1,7 @@
-import '../../bootstrapServices'
-import { test, gql } from '../../helper'
-import { Schema } from '../../../src/schema/Schema'
-import { DatabaseService } from '../../../src/services/DatabaseService'
+import 'tests/bootstrapServices'
+import { test, gql } from 'tests/helper'
+import { Schema } from 'src/schema/Schema'
+import { DatabaseService } from 'src/services/DatabaseService'
 import { Container } from 'typedi'
 
 test('@create', async t => {
