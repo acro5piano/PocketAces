@@ -55,6 +55,7 @@
     "**/vendor/**",
     ".git",
     "./example.js",
+    "./*.config.js",
     "**/__mocks__/*"
   ]
 }

@@ -1,8 +1,11 @@
 {
   "name": "@pocket-ace/core",
   "version": "0.0.1",
-  "main": "index.js",
   "license": "MIT",
+  "main": "build/index.js",
+  "jsnext:main": "build/index.es.js",
+  "module": "build/index.es.js",
+  "types": "build/src/index.d.ts",
   "scripts": {
     "test": "ava --serial",
     "build": "rm -rf build && yarn rollup -c",
