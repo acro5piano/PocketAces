@@ -9,8 +9,7 @@
   "scripts": {
     "test": "ava --serial",
     "build": "rm -rf build && yarn rollup -c",
-    "r": "node -r ts-node/register/transpile-only -r ./src/bootstrap",
-    "e": "node -r ts-node/register/transpile-only -r ./src/bootstrap -pe"
+    "r": "node -r ts-node/register/transpile-only -r tsconfig-paths/register -r ./src/bootstrap"
   },
   "dependencies": {
     "bcrypt": "^4.0.1",
