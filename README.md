@@ -5,6 +5,8 @@
 
 An Experimental GrpahQL framework
 
+Note: under heavy development. Do not use in production.
+
 # Features to build
 
 The following features **will** be implemented:
@@ -19,18 +21,20 @@ The following features **will** be implemented:
 
 # Getting Started
 
-Install it:
+Install:
 
 ```
-yarn add @pocket-ace/core
+yarn add @pocket-ace/core graphql sqlite3
 ```
 
 Define your app:
 
 ```javascript
+// app.js
+
 require('reflect-metadata')
 
-const PocketAce = require('./build')
+const PocketAce = require('@pocket-ace/core')
 
 PocketAce.registerResolver('hello', () => 'world')
 
@@ -72,6 +76,8 @@ PocketAce.sql(sql).then(() => {
 ```
 
 I know the above code is ugly. We'll improve it soon.
+
+Then run `app.js` and open http://localhost:3000
 
 # Directory structure for the Framework
 
