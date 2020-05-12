@@ -1,9 +1,9 @@
-import { DirectiveContract } from '../contracts/DirectiveContract'
-import { AllDirective } from '../directives/AllDirective'
-import { CreateDirective } from '../directives/CreateDirective'
-import { FindDirective } from '../directives/FindDirective'
-import { LogDirective } from '../directives/LogDirective'
-import { WhereDirective } from '../directives/WhereDirective'
+import { DirectiveContract } from 'src/contracts/DirectiveContract'
+import { AllDirective } from 'src/directives/AllDirective'
+import { CreateDirective } from 'src/directives/CreateDirective'
+import { FindDirective } from 'src/directives/FindDirective'
+import { LogDirective } from 'src/directives/LogDirective'
+import { WhereDirective } from 'src/directives/WhereDirective'
 import { Container } from 'typedi'
 
 export class DirectiveRegistry {

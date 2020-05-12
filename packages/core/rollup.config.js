@@ -12,7 +12,7 @@ export default {
       },
     })
   ],
-  external: id => !id.startsWith('.') && !id.startsWith('/') && id !== 'tslib' && id !== 'refrect-metadata',
+  external: id => !id.startsWith('.') && !id.startsWith('/') && id !== 'tslib' && !id.startsWith('src/'),
   output: [
     {
       file: 'build/index.js',

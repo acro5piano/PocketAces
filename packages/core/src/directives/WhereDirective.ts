@@ -1,6 +1,6 @@
 import { Service, Inject } from 'typedi'
-import { DatabaseService } from '../services/DatabaseService'
-import { DirectiveContract } from '../contracts/DirectiveContract'
+import { DatabaseService } from 'src/services/DatabaseService'
+import { DirectiveContract } from 'src/contracts/DirectiveContract'
 
 @Service()
 export class WhereDirective implements DirectiveContract {

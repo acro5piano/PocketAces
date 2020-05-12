@@ -1,7 +1,7 @@
-import { HttpService } from './services/HttpService'
-import { GraphQLService } from './services/GraphQLService'
-import { ConfigService } from './services/ConfigService'
-import { DatabaseService } from './services/DatabaseService'
+import { HttpService } from 'src/services/HttpService'
+import { GraphQLService } from 'src/services/GraphQLService'
+import { ConfigService } from 'src/services/ConfigService'
+import { DatabaseService } from 'src/services/DatabaseService'
 import { Container } from 'typedi'
 
 export const registerResolver = Container.get(GraphQLService).registerResolver

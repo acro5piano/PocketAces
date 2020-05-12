@@ -1,6 +1,6 @@
 import { Service } from 'typedi'
-import { Schema } from '../schema'
-import { Resolver } from '../schema/ResolverRegistry'
+import { Schema } from 'src/schema'
+import { Resolver } from 'src/schema/ResolverRegistry'
 
 @Service()
 export class GraphQLService {
