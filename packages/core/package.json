@@ -1,12 +1,15 @@
 {
   "name": "@pocket-ace/core",
   "version": "0.0.1",
-  "main": "index.js",
   "license": "MIT",
+  "main": "build/index.js",
+  "jsnext:main": "build/index.es.js",
+  "module": "build/index.es.js",
+  "types": "build/src/index.d.ts",
   "scripts": {
     "test": "ava --serial",
-    "r": "node -r ts-node/register/transpile-only -r ./src/bootstrap",
-    "e": "node -r ts-node/register/transpile-only -r ./src/bootstrap -pe"
+    "build": "rm -rf build && yarn rollup -c",
+    "r": "node -r ts-node/register/transpile-only -r tsconfig-paths/register -r ./src/bootstrap"
   },
   "dependencies": {
     "bcrypt": "^4.0.1",
@@ -20,6 +23,7 @@
     "typedi": "^0.8.0"
   },
   "devDependencies": {
+    "@rollup/plugin-typescript": "^4.1.1",
     "@types/koa": "^2.11.3",
     "@types/koa-bodyparser": "^4.3.0",
     "@types/node": "^13.13.5",
@@ -27,6 +31,8 @@
     "ava": "^3.8.2",
     "graphql": "^15.0.0",
     "pg": "^8.1.0",
+    "rollup": "^2.9.1",
+    "rollup-plugin-typescript2": "^0.27.0",
     "sqlite3": "^4.2.0",
     "supertest": "^4.0.2",
     "ts-node": "^8.10.1",

@@ -1,3 +1,3 @@
 import 'reflect-metadata'
-import './services/ConfigService'
-import './services/DatabaseService'
+import 'src/services/ConfigService'
+import 'src/services/DatabaseService'

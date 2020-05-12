@@ -21,7 +21,7 @@ import {
 import { TypeRegistry } from './TypeRegistry'
 import { Resolver, ResolverRegistry } from './ResolverRegistry'
 import { DirectiveRegistry } from './DirectiveRegistry'
-import { debug } from '../utils'
+import { debug } from 'src/utils'
 
 type AnyGraphQLFieldConfig = GraphQLFieldConfig<any, any>
 
