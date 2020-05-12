@@ -1,6 +1,5 @@
 import Koa from 'koa'
 import bodyParser from 'koa-bodyparser'
-import { graphql } from 'graphql'
 import { Service, Inject } from 'typedi'
 import { GraphQLService } from './GraphQLService'
 
@@ -18,19 +17,18 @@ export class HttpService {
       if (ctx.request.path === '/' && ctx.request.method === 'GET') {
         ctx.body = { status: 'ok' }
       }
-      next()
+      return next()
     })
 
     this.server.use(async (ctx, next) => {
       if (ctx.request.path === '/graphql' && ctx.request.method === 'POST') {
-        const res = await graphql(
-          this.graphql.schema.schema,
-          ctx.request.body.query,
-          ctx.request.body.variables,
-        )
+        const res = await this.graphql.schema.executeGraphQL({
+          query: ctx.request.body.query,
+          variables: ctx.request.body.variables,
+        })
         ctx.body = res
       }
-      next()
+      return next()
     })
 
     return this

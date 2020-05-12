@@ -12,7 +12,7 @@ export class DatabaseService {
   @Inject()
   config!: ConfigService
 
-  init() {
+  initialize() {
     const db = knex(knexStringcase(this.config.database))
     knexTinyLogger(db)
     this.db = db

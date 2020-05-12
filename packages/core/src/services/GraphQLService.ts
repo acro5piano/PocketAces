@@ -6,11 +6,11 @@ import { Resolver } from '../schema/ResolverRegistry'
 export class GraphQLService {
   schema = new Schema()
 
-  async buildSchema(schemaString: string) {
+  buildSchema = async (schemaString: string) => {
     await this.schema.buildSchema(schemaString)
   }
 
-  registerResolver(name: string, resolver: Resolver) {
+  registerResolver = (name: string, resolver: Resolver) => {
     this.schema.registerResolver(name, resolver)
   }
 }

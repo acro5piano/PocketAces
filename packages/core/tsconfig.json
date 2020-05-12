@@ -1,8 +1,8 @@
 {
   "compilerOptions": {
     /* Basic Options */
-    "target": "es5",
-    "declaration": false,
+    "target": "es6",
+    "declaration": true,
     "sourceMap": true,
     "inlineSources": true,
     "removeComments": true,
@@ -36,7 +36,8 @@
     "allowSyntheticDefaultImports": true,
     "esModuleInterop": true,
     "moduleResolution": "node",
-    "module": "commonjs",
+    // "module": "commonjs",
+    "module": "esnext",
     "baseUrl": "./",
     "allowJs": true,
     "forceConsistentCasingInFileNames": true,
@@ -53,6 +54,7 @@
     "**/node_modules/**",
     "**/vendor/**",
     ".git",
+    "./example.js",
     "**/__mocks__/*"
   ]
 }
