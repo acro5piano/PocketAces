@@ -1,7 +1,7 @@
 import { GraphQLType } from 'graphql'
 
 export class TypeRegistry {
-  types = new Map<string, GraphQLType>()
+  private types = new Map<string, GraphQLType>()
 
   register(name: string, type: GraphQLType) {
     this.types.set(name, type)
