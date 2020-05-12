@@ -9,8 +9,8 @@ export class FindDirective implements DirectiveContract {
 
   name = 'find'
 
-  resolveField() {
-    return this.database.db.table('users').first()
+  resolveField({ operationArgs }: any) {
+    return this.database.db.table('users').where({ id: operationArgs.id }).first()
   }
 }
 

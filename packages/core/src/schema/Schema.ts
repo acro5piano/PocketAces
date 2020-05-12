@@ -35,6 +35,9 @@ export class Schema {
   private resolverRegistry = new ResolverRegistry()
   private directiveRegistry = new DirectiveRegistry()
 
+  // TODO: we later separate executor and schema, but for now just testing
+  private currentVariables!: any
+
   get schema() {
     if (!this.rawSchema) {
       throw new Error('Schema is not defined yet')
@@ -47,10 +50,10 @@ export class Schema {
   }
 
   async executeGraphQL<V>({ query, variables }: { query: string; variables?: V }) {
-    const res = await graphql(this.schema, query, variables)
-    if (res.errors) {
-      debug(res.errors)
-    }
+    this.currentVariables = variables
+    const res = await graphql(this.schema, query, null, null, variables)
+    debug(res.errors, !!res.errors)
+    debug(res.data, !!res.data)
     return res
   }
 
@@ -147,6 +150,7 @@ export class Schema {
           return () =>
             directives.reduce((currentValue, { directiveClass, args }) => {
               return directiveClass.resolveField({
+                operationArgs: this.currentVariables,
                 currentValue,
                 field,
                 parent,

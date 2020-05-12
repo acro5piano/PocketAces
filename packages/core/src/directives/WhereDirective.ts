@@ -9,8 +9,7 @@ export class WhereDirective implements DirectiveContract {
 
   name = 'where'
 
-  resolveField({ directiveArgs }: any) {
-    console.log(directiveArgs)
+  resolveField() {
     return this.database.db.table('users')
   }
 }
