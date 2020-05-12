@@ -25,12 +25,6 @@ const mockedDatabaseService = {
   },
 }
 
-// TODO: failing Container.set in typedi so mock DB in this way
-// Object.assign(AllDirective, { database: mockedDatabaseService })
-// Object.assign(WhereDirective, { database: mockedDatabaseService })
-
-// console.log(Container.get('database').db.table)
-
 test('schema#executeGraphQL', async t => {
   Container.set(DatabaseService, mockedDatabaseService)
   const schema = new Schema()
