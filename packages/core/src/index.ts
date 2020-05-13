@@ -1,3 +1,4 @@
+import './bootstrap'
 import { Container } from 'typedi'
 import { HttpService } from 'src/services/HttpService'
 import { GraphQLService } from 'src/services/GraphQLService'

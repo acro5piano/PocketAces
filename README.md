@@ -32,8 +32,6 @@ Define your app:
 ```javascript
 // app.js
 
-require('reflect-metadata')
-
 const PocketAce = require('@pocket-ace/core')
 
 PocketAce.registerResolver('hello', () => 'world')
@@ -48,11 +46,11 @@ PocketAce.configureDatabase({
 PocketAce.buildSchema(`
   type Query {
     hello: String!
-    users: [User!]! @all
+    users: [User!]! @all(table: "users")
   }
 
   type Mutation {
-    createUser(name: String!): User @create
+    createUser(name: String!): User @create(table: "users")
   }
 
   type User {
