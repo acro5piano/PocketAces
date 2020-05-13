@@ -1,6 +1,7 @@
 import { BaseDirective } from './BaseDirective'
+import { DirectiveContract } from 'src/contracts/DirectiveContract'
 
-export class LogDirective extends BaseDirective {
+export class LogDirective extends BaseDirective implements DirectiveContract {
   name = 'log'
 
   resolveField({ currentValue }: any) {

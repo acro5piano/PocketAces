@@ -7,6 +7,8 @@ import { DirectiveExecutionArgs, DirectiveContext } from 'src/contracts/Directiv
 export class BaseDirective<TArgs extends object = object, TInput extends object = object> {
   private context!: DirectiveContext<TArgs, TInput>
 
+  service = '__'
+
   name = '__base'
 
   resolveField(_args: DirectiveExecutionArgs<any>) {

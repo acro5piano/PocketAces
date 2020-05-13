@@ -1,7 +1,6 @@
-import { DirectiveContract } from 'src/contracts/DirectiveContract'
 import { BaseDirective } from './BaseDirective'
 
-export class CreateDirective extends BaseDirective implements DirectiveContract {
+export class CreateDirective extends BaseDirective {
   name = 'create'
 
   async resolveField() {
