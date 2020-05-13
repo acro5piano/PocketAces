@@ -1,9 +1,13 @@
 import request from 'supertest'
 import anyTest, { TestInterface } from 'ava'
+import { DatabaseService } from 'src/services/DatabaseService'
+import { Container } from 'typedi'
+import Knex from 'knex'
 
 export const test = anyTest.serial as TestInterface<{
   server: any
   graphql: ReturnType<typeof makeGraphql>
+  db: Knex
 }>
 
 export const gql = (literal: TemplateStringsArray) => literal[0]
@@ -44,4 +48,21 @@ export function makeGraphql(app: any) {
     console.log(JSON.stringify(res.body, undefined, 2))
     return res.body
   }
+}
+
+export async function createTestDB() {
+  await Container.get(DatabaseService).db.raw(`
+    create table users (
+      id integer not null primary key autoincrement,
+      name string not null default ''
+    )
+  `)
+  await Container.get(DatabaseService).db.raw(`
+    create table posts (
+      id integer not null primary key autoincrement,
+      user_id integer not null,
+      title string not null default '',
+      foreign key("user_id") references "users"("id") on delete cascade
+    )
+  `)
 }

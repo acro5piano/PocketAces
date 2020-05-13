@@ -16,4 +16,5 @@ test.beforeEach(t => {
   Container.get(HttpService).initialize()
   t.context.server = Container.get(HttpService).server
   t.context.graphql = makeGraphql(t.context.server.listen())
+  t.context.db = Container.get(DatabaseService).db
 })

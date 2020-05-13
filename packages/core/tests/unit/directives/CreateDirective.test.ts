@@ -1,26 +1,11 @@
 import 'tests/bootstrapServices'
-import { test, gql } from 'tests/helper'
+import { test, gql, createTestDB } from 'tests/helper'
 import { Schema } from 'src/schema/Schema'
-import { DatabaseService } from 'src/services/DatabaseService'
-import { Container } from 'typedi'
 
 test('@create', async t => {
   const schema = new Schema()
 
-  await Container.get(DatabaseService).db.raw(`
-    create table users (
-      id integer not null primary key autoincrement,
-      name string not null default ''
-    )
-  `)
-  await Container.get(DatabaseService).db.raw(`
-    create table posts (
-      id integer not null primary key autoincrement,
-      user_id integer not null,
-      title string not null default '',
-      foreign key("user_id") references "users"("id") on delete cascade
-    )
-  `)
+  await createTestDB()
 
   schema.buildSchema(gql`
     type Query {

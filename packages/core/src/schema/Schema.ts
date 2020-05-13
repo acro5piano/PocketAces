@@ -17,6 +17,7 @@ import {
   GraphQLInt,
   GraphQLObjectType,
   GraphQLInputObjectType,
+  GraphQLResolveInfo,
 } from 'graphql'
 import { TypeRegistry } from './TypeRegistry'
 import { Resolver, ResolverRegistry } from './ResolverRegistry'
@@ -142,7 +143,7 @@ export class Schema {
     }
   }
 
-  private resolveFieldResolver<T extends object = object>(
+  private resolveFieldResolver<P extends object = object, T extends object = object>(
     parent: ObjectTypeDefinitionNode,
     field: FieldDefinitionNode,
   ) {
@@ -161,10 +162,10 @@ export class Schema {
       return defaultFieldResolver
     }
 
-    return (_: any, inputArgs: T) => {
+    return (parentValue: P, inputArgs: T, resolveInfo: GraphQLResolveInfo) => {
       let value = null
       if (specifiedResolver) {
-        value = specifiedResolver(_, null, inputArgs, null as any)
+        value = specifiedResolver(parentValue, null, inputArgs, null as any)
       }
       return directives.reduce((currentValue, directive) => {
         return directive
@@ -175,6 +176,8 @@ export class Schema {
           })
           .resolveField({
             currentValue,
+            resolveInfo,
+            parentValue,
           })
       }, value)
     }
