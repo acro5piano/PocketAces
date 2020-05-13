@@ -29,11 +29,18 @@ import { DirectiveRegistry } from './DirectiveRegistry'
 import { debug } from 'src/utils'
 import { DirectiveContract } from 'src/contracts/DirectiveContract'
 import { PrimitiveTypeArray } from 'src/utils'
+import { Request } from 'koa'
 
 type AnyGraphQLFieldConfig = GraphQLFieldConfig<any, any>
 
 function isRootNode(node: ObjectTypeDefinitionNode) {
   return ['Query', 'Mutation', 'Subscription'].includes(node.name.value)
+}
+
+interface GraphQLExecutionArgs<V, C> {
+  query: string
+  variables?: V
+  context?: C
 }
 
 export class Schema {
@@ -53,8 +60,12 @@ export class Schema {
     return printSchema(this.schema)
   }
 
-  async executeGraphQL<V>({ query, variables }: { query: string; variables?: V }) {
-    const res = await graphql(this.schema, query, null, null, variables)
+  async executeGraphQL<V, C = Request>({
+    query,
+    variables,
+    context,
+  }: GraphQLExecutionArgs<V, C>) {
+    const res = await graphql(this.schema, query, null, context, variables)
     debug(res.errors, !!res.errors)
     debug(res.data, !!res.data)
     return res
@@ -71,7 +82,7 @@ export class Schema {
   buildSchema(schema: string) {
     const documentNode = parse(schema)
 
-    documentNode.definitions.forEach(definition => {
+    documentNode.definitions.forEach((definition) => {
       switch (definition.kind) {
         case 'ObjectTypeDefinition':
           this.registerObjectType(definition)
@@ -110,7 +121,9 @@ export class Schema {
     )
   }
 
-  private resolveInputObjectFieldFunction(definition: InputObjectTypeDefinitionNode) {
+  private resolveInputObjectFieldFunction(
+    definition: InputObjectTypeDefinitionNode,
+  ) {
     return () => {
       if (!definition.fields) {
         return {}
@@ -148,10 +161,10 @@ export class Schema {
     }
   }
 
-  private resolveFieldResolver<P extends object = object, T extends object = object>(
-    parent: ObjectTypeDefinitionNode,
-    field: FieldDefinitionNode,
-  ) {
+  private resolveFieldResolver<
+    P extends object = object,
+    T extends object = object
+  >(parent: ObjectTypeDefinitionNode, field: FieldDefinitionNode) {
     const specifiedResolver = this.resolverRegistry.getOrNull(field.name.value)
     const directives = this.findDirectives(field)
 
@@ -167,16 +180,22 @@ export class Schema {
       return defaultFieldResolver
     }
 
-    return (parentValue: P, inputArgs: T, resolveInfo: GraphQLResolveInfo) => {
+    return (
+      parentValue: P,
+      inputArgs: T,
+      context: { user?: { id: number; role: string } },
+      resolveInfo: GraphQLResolveInfo,
+    ) => {
       let value = null
       if (specifiedResolver) {
         value = specifiedResolver(parentValue, null, inputArgs, null as any)
       }
       return directives.reduce((currentValue, directive) => {
         return directive
-          .setContext({
+          .setParameters({
             field,
             parent,
+            context,
             inputArgs,
           })
           .resolveField({
@@ -192,8 +211,10 @@ export class Schema {
     if (!field.directives) {
       return []
     }
-    return field.directives.map(directive => {
-      const singletonDirective = this.directiveRegistry.get(directive.name.value)
+    return field.directives.map((directive) => {
+      const singletonDirective = this.directiveRegistry.get(
+        directive.name.value,
+      )
 
       // TODO:
       //    Here we can't guarantee this code works,

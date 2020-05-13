@@ -1,4 +1,8 @@
-import { ObjectTypeDefinitionNode, FieldDefinitionNode, GraphQLResolveInfo } from 'graphql'
+import {
+  ObjectTypeDefinitionNode,
+  FieldDefinitionNode,
+  GraphQLResolveInfo,
+} from 'graphql'
 import Knex from 'knex'
 
 export interface DirectiveExecutionArgs<TValue = any, TParent = any> {
@@ -13,11 +17,16 @@ export interface DirectiveExecutionChainable<TParent = any> {
   resolveInfo: GraphQLResolveInfo
 }
 
-export interface DirectiveContext<TArgs extends object, TInput extends object> {
+export interface DirectiveParameters<
+  TArgs extends object,
+  TInput extends object,
+  TContext extends object
+> {
   field: FieldDefinitionNode
   parent: ObjectTypeDefinitionNode
   directiveArgs: TArgs
   inputArgs: TInput
+  context: TContext
 }
 
 // Should we implement this pattern?
@@ -28,16 +37,17 @@ export interface DirectiveContract<
   TInput extends object = object,
   TValue = null,
   TParent extends object = object,
-  TNext = any
+  TNext = any,
+  TContext extends object = object
 > {
   name: string
   resolveField(
     args: DirectiveExecutionArgs<TValue, TParent>,
   ): TNext | Promise<TNext> | void | Promise<void>
   forge(
-    ctx: Partial<DirectiveContext<TArgs, TInput>>,
+    ctx: Partial<DirectiveParameters<TArgs, TInput, TContext>>,
   ): DirectiveContract<TArgs, TInput, TValue, TParent, TNext>
-  setContext(
-    ctx: Partial<DirectiveContext<TArgs, TInput>>,
+  setParameters(
+    ctx: Partial<DirectiveParameters<TArgs, TInput, TContext>>,
   ): DirectiveContract<TArgs, TInput, TValue, TParent, TNext>
 }

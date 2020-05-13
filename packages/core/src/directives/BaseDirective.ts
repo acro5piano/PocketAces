@@ -1,13 +1,21 @@
 import { Service, Inject } from 'typedi'
 import { DatabaseService } from 'src/services/DatabaseService'
 import { ConfigService } from 'src/services/ConfigService'
-import { DirectiveExecutionArgs, DirectiveContext } from 'src/contracts/DirectiveContract'
+import {
+  DirectiveExecutionArgs,
+  DirectiveParameters,
+} from 'src/contracts/DirectiveContract'
 import { ReloationLoader } from 'src/database/ReloationLoader'
+import { AuthContext } from 'src/auth/AuthContext'
 import Knex from 'knex'
 
 @Service()
-export class BaseDirective<TArgs extends object = object, TInput extends object = object> {
-  private context!: DirectiveContext<TArgs, TInput>
+export class BaseDirective<
+  TArgs extends object = object,
+  TInput extends object = object,
+  TContext extends AuthContext = AuthContext
+> {
+  private parameters!: DirectiveParameters<TArgs, TInput, TContext>
 
   resolveField(_args: DirectiveExecutionArgs<any>) {
     throw new Error()
@@ -19,15 +27,23 @@ export class BaseDirective<TArgs extends object = object, TInput extends object 
     @Inject() protected readonly loader: ReloationLoader,
   ) {}
 
-  forge(ctx: Partial<DirectiveContext<TArgs, TInput>>): BaseDirective {
+  forge(
+    ctx: Partial<DirectiveParameters<TArgs, TInput, TContext>>,
+  ): BaseDirective {
     // @ts-ignore
-    const newInstance = new this.constructor(this.database, this.config, this.loader)
-    newInstance.setContext(ctx)
+    const newInstance = new this.constructor(
+      this.database,
+      this.config,
+      this.loader,
+    )
+    newInstance.setParameters(ctx)
     return newInstance
   }
 
-  setContext(ctx: Partial<DirectiveContext<TArgs, TInput>>): BaseDirective<TArgs, TInput> {
-    this.context = { ...this.context, ...ctx }
+  setParameters(
+    ctx: Partial<DirectiveParameters<TArgs, TInput, TContext>>,
+  ): BaseDirective<TArgs, TInput> {
+    this.parameters = { ...this.parameters, ...ctx }
     return this
   }
 
@@ -39,22 +55,33 @@ export class BaseDirective<TArgs extends object = object, TInput extends object 
   }
 
   protected getDirectiveArgValue(name: keyof TArgs) {
-    return this.context.directiveArgs[name]
+    return this.parameters.directiveArgs[name]
   }
 
   protected getInputArgValue(name: keyof TInput) {
-    return this.context.inputArgs[name]
+    return this.parameters.inputArgs[name]
   }
 
   protected getInputArgs() {
-    return this.context.inputArgs
+    return this.parameters.inputArgs
   }
 
   protected getDirectiveArgs() {
-    return this.context.directiveArgs
+    return this.parameters.directiveArgs
   }
 
-  protected db() {
+  protected getCurrentUser() {
+    if (!this.parameters.context.user) {
+      throw new Error('Not Authorized.')
+    }
+    return this.parameters.context.user
+  }
+
+  protected getParentTypeName() {
+    return this.parameters.parent.name.value
+  }
+
+  protected get db() {
     return this.database.db
   }
 }

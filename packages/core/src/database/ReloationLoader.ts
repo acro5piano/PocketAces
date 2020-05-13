@@ -9,10 +9,12 @@ export class ReloationLoader {
 
   loaders = new Map<string, DataLoader<string, object[]>>()
 
-  constructor() {}
+  clear() {
+    this.loaders.clear()
+  }
 
   getLoader(tableName: string, key: string) {
-    const loader = this.loaders.get(tableName)
+    const loader = this.loaders.get(`${tableName}__${key}`)
     if (!loader) {
       const loader = new DataLoader(
         (ids: readonly string[]) => {
@@ -20,7 +22,7 @@ export class ReloationLoader {
             .table<{ [k in typeof key]: string }>(tableName)
             .whereIn(key, ids)
             .select()
-            .then(rows => ids.map(id => rows.filter(x => x[key] === id)))
+            .then((rows) => ids.map((id) => rows.filter((x) => x[key] === id)))
         },
         { cache: false },
       )

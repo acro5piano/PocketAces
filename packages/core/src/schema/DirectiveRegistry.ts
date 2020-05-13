@@ -2,10 +2,12 @@ import { Container } from 'typedi'
 import { DirectiveContract } from 'src/contracts/DirectiveContract'
 
 import { AllDirective } from 'src/directives/AllDirective'
+import { AuthDirective } from 'src/directives/AuthDirective'
 import { CreateDirective } from 'src/directives/CreateDirective'
 import { HasManyDirective } from 'src/directives/HasManyDirective'
 import { FindDirective } from 'src/directives/FindDirective'
 import { LogDirective } from 'src/directives/LogDirective'
+import { LoginDirective } from 'src/directives/LoginDirective'
 import { ScopeDirective } from 'src/directives/ScopeDirective'
 import { WhereDirective } from 'src/directives/WhereDirective'
 
@@ -15,14 +17,16 @@ export class DirectiveRegistry {
   constructor() {
     const builtinDirectives = [
       AllDirective,
+      AuthDirective,
       CreateDirective,
       HasManyDirective,
       FindDirective,
       LogDirective,
+      LoginDirective,
       ScopeDirective,
       WhereDirective,
     ]
-    builtinDirectives.forEach(directive => {
+    builtinDirectives.forEach((directive) => {
       // @ts-ignore
       this.register(Container.get(directive))
     })

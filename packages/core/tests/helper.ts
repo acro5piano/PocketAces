@@ -30,10 +30,11 @@ interface GraphqlArgument<V> {
 
 export type GraphQLResponse<T> = {
   data: T
+  errors?: [{ message: string }]
 }
 
 export function makeGraphql(app: any) {
-  return async function graphql<T, V = any>({
+  return async function graphql<T = any, V = any>({
     query,
     variables = undefined,
     authorization = '',
@@ -45,7 +46,6 @@ export function makeGraphql(app: any) {
         variables,
       })
       .set('Authorization', authorization)
-    console.log(JSON.stringify(res.body, undefined, 2))
     return res.body
   }
 }
@@ -55,6 +55,8 @@ export async function createTestDB() {
     create table users (
       id integer not null primary key autoincrement,
       name string not null default '',
+      email string not null default '',
+      password_hash string,
       is_active boolean not null default false
     )
   `)
