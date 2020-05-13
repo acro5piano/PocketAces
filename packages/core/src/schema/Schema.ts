@@ -198,8 +198,6 @@ export class Schema {
         }
       }, {})
 
-      // console.log(singletonDirective)
-
       return singletonDirective.forge({
         directiveArgs,
       })
