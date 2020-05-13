@@ -26,7 +26,7 @@ export class DirectiveRegistry {
       ScopeDirective,
       WhereDirective,
     ]
-    builtinDirectives.forEach(directive => {
+    builtinDirectives.forEach((directive) => {
       // @ts-ignore
       this.register(Container.get(directive))
     })

@@ -22,7 +22,7 @@ export class ReloationLoader {
             .table<{ [k in typeof key]: string }>(tableName)
             .whereIn(key, ids)
             .select()
-            .then(rows => ids.map(id => rows.filter(x => x[key] === id)))
+            .then((rows) => ids.map((id) => rows.filter((x) => x[key] === id)))
         },
         { cache: false },
       )

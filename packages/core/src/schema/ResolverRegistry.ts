@@ -1,6 +1,8 @@
 import { GraphQLFieldResolver, GraphQLTypeResolver } from 'graphql'
 
-export type Resolver = GraphQLFieldResolver<any, any> | GraphQLTypeResolver<any, any>
+export type Resolver =
+  | GraphQLFieldResolver<any, any>
+  | GraphQLTypeResolver<any, any>
 
 export class ResolverRegistry {
   private resolvers = new Map<string, Resolver>()

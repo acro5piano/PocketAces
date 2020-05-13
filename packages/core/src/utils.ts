@@ -15,7 +15,10 @@ export function debug(v: any, cond: any = true) {
 }
 
 export type PrimitiveType = string | number | boolean | null
-export type PrimitiveTypeArray = PrimitiveType[] | PrimitiveType | PrimitiveTypeArray[]
+export type PrimitiveTypeArray =
+  | PrimitiveType[]
+  | PrimitiveType
+  | PrimitiveTypeArray[]
 
 export function pick<T, K extends keyof T>(obj: T, ...keys: K[]): Pick<T, K> {
   const picked: Pick<T, K> = {} as any

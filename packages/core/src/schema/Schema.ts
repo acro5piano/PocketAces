@@ -82,7 +82,7 @@ export class Schema {
   buildSchema(schema: string) {
     const documentNode = parse(schema)
 
-    documentNode.definitions.forEach(definition => {
+    documentNode.definitions.forEach((definition) => {
       switch (definition.kind) {
         case 'ObjectTypeDefinition':
           this.registerObjectType(definition)
@@ -211,7 +211,7 @@ export class Schema {
     if (!field.directives) {
       return []
     }
-    return field.directives.map(directive => {
+    return field.directives.map((directive) => {
       const singletonDirective = this.directiveRegistry.get(
         directive.name.value,
       )
