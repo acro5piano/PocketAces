@@ -106,7 +106,7 @@ curl -XPOST localhost:3000/graphql -d query='{ hello }'
      `-- LoginUserTest.ts #
 ```
 
-# Build with
+# Built with
 
 Main dependencies:
 
@@ -114,6 +114,7 @@ Main dependencies:
 - GraphQL
 - Knex
 - TypeDI
+- Dataloader
 
 Development:
 
