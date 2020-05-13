@@ -1,12 +1,6 @@
-import { Service, Inject } from 'typedi'
-import { DatabaseService } from 'src/services/DatabaseService'
-import { DirectiveContract } from 'src/contracts/DirectiveContract'
+import { BaseDirective } from './BaseDirective'
 
-@Service()
-export class WhereDirective implements DirectiveContract {
-  @Inject()
-  database!: DatabaseService
-
+export class WhereDirective extends BaseDirective {
   name = 'where'
 
   resolveField() {

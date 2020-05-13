@@ -147,14 +147,16 @@ export class Schema {
 
         if (directives.length > 0) {
           return (_: any, inputArgs: T) =>
-            directives.reduce((currentValue, { directiveClass, args }) => {
-              return directiveClass.resolveField({
-                currentValue,
-                field,
-                parent,
-                directiveArgs: args,
-                inputArgs,
-              })
+            directives.reduce((currentValue, directive) => {
+              return directive
+                .setContext({
+                  field,
+                  parent,
+                  inputArgs,
+                })
+                .resolveField({
+                  currentValue,
+                })
             }, null as any)
         }
 
@@ -175,20 +177,17 @@ a resolver class through:
     return defaultFieldResolver
   }
 
-  // TODO:
-  //    The return values are { directiveClass: DirectiveContract, args: any }
-  //    Because we use DI for directive Class,
-  //    but we can create Directive like `new Directive(args)`
-  //    consideration is neede here
   private findDirectives(field: FieldDefinitionNode) {
     if (!field.directives) {
       return []
     }
     return field.directives.map(directive => {
+      const singletonDirective = this.directiveRegistry.get(directive.name.value)
+
       // TODO:
-      //    Here we can't guarantee this code works or not.
+      //    Here we can't guarantee this code works,
       //    Maybe args handling should be done more proper way.
-      const args = (directive.arguments || []).reduce((args, arg) => {
+      const directiveArgs = (directive.arguments || []).reduce((args, arg) => {
         return {
           ...args,
           // @ts-ignore
@@ -196,10 +195,11 @@ a resolver class through:
         }
       }, {})
 
-      return {
-        args,
-        directiveClass: this.directiveRegistry.get(directive.name.value),
-      }
+      // console.log(singletonDirective)
+
+      return singletonDirective.forge({
+        directiveArgs,
+      })
     })
   }
 
