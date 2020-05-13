@@ -22,6 +22,7 @@ import { TypeRegistry } from './TypeRegistry'
 import { Resolver, ResolverRegistry } from './ResolverRegistry'
 import { DirectiveRegistry } from './DirectiveRegistry'
 import { debug } from 'src/utils'
+import { DirectiveContract } from 'src/contracts/DirectiveContract'
 
 type AnyGraphQLFieldConfig = GraphQLFieldConfig<any, any>
 
@@ -55,6 +56,10 @@ export class Schema {
 
   registerResolver(name: string, resolver: Resolver) {
     this.resolverRegistry.register(name, resolver)
+  }
+
+  registerDirective(directive: DirectiveContract) {
+    this.directiveRegistry.register(directive)
   }
 
   buildSchema(schema: string) {
@@ -141,40 +146,38 @@ export class Schema {
     parent: ObjectTypeDefinitionNode,
     field: FieldDefinitionNode,
   ) {
-    if (isRootNode(parent)) {
-      if (this.resolverRegistry.missing(field.name.value)) {
-        const directives = this.findDirectives(field)
+    const specifiedResolver = this.resolverRegistry.getOrNull(field.name.value)
+    const directives = this.findDirectives(field)
 
-        if (directives.length > 0) {
-          return (_: any, inputArgs: T) =>
-            directives.reduce((currentValue, directive) => {
-              return directive
-                .setContext({
-                  field,
-                  parent,
-                  inputArgs,
-                })
-                .resolveField({
-                  currentValue,
-                })
-            }, null as any)
-        }
-
-        // Since we already know we are on the root type, this is either
-        // query, mutation or subscription
-        throw new Error(`
-Could not locate a field resolver for the ${parent.name.value}: ${field.name.value}.
-
-Either add a resolver directive such as @all, @find or @create or add
-a resolver class through:
-
-  schema.register('${field.name.value}', () => 'ok')
-        `)
-      }
-
-      return this.resolverRegistry.get(field.name.value)
+    if (isRootNode(parent) && directives.length === 0 && !specifiedResolver) {
+      // Since we already know we are on the root type, this is either
+      // query, mutation or subscription
+      throw new Error(
+        `Could not locate a field resolver for the ${parent.name.value}: ${field.name.value}.`,
+      )
     }
-    return defaultFieldResolver
+
+    if (!isRootNode(parent) && directives.length === 0 && !specifiedResolver) {
+      return defaultFieldResolver
+    }
+
+    return (_: any, inputArgs: T) => {
+      let value = null
+      if (specifiedResolver) {
+        value = specifiedResolver(_, null, inputArgs, null as any)
+      }
+      return directives.reduce((currentValue, directive) => {
+        return directive
+          .setContext({
+            field,
+            parent,
+            inputArgs,
+          })
+          .resolveField({
+            currentValue,
+          })
+      }, value)
+    }
   }
 
   private findDirectives(field: FieldDefinitionNode) {

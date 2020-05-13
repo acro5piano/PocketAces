@@ -8,7 +8,7 @@ test('graphql#health', async t => {
 
   Container.get(GraphQLService).buildSchema(gql`
     type Query {
-      health: String! @resolve
+      health: String!
     }
   `)
 

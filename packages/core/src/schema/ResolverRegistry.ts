@@ -28,4 +28,8 @@ export class ResolverRegistry {
     }
     return maybeType
   }
+
+  getOrNull(name: string): Resolver | null {
+    return this.resolvers.get(name) || null
+  }
 }

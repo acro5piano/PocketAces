@@ -2,7 +2,17 @@ require('reflect-metadata')
 
 const PocketAce = require('./build')
 
+class MyDirective extends PocketAce.BaseDirective {
+  name = 'myDirective'
+
+  resolveField({ currentValue }) {
+    console.log('Hello')
+    return currentValue
+  }
+}
+
 PocketAce.registerResolver('hello', () => 'world')
+PocketAce.registerDirective(new MyDirective())
 
 PocketAce.configureDatabase({
   client: 'sqlite',
@@ -14,7 +24,7 @@ PocketAce.configureDatabase({
 
 PocketAce.buildSchema(`
   type Query {
-    hello: String!
+    hello: String! @myDirective
     users: [User!]! @all
   }
 
