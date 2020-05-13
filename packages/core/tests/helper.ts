@@ -30,6 +30,7 @@ interface GraphqlArgument<V> {
 
 export type GraphQLResponse<T> = {
   data: T
+  errors?: [{ message: string }]
 }
 
 export function makeGraphql(app: any) {

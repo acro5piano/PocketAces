@@ -7,6 +7,7 @@ import { CreateDirective } from 'src/directives/CreateDirective'
 import { HasManyDirective } from 'src/directives/HasManyDirective'
 import { FindDirective } from 'src/directives/FindDirective'
 import { LogDirective } from 'src/directives/LogDirective'
+import { LoginDirective } from 'src/directives/LoginDirective'
 import { ScopeDirective } from 'src/directives/ScopeDirective'
 import { WhereDirective } from 'src/directives/WhereDirective'
 
@@ -21,6 +22,7 @@ export class DirectiveRegistry {
       HasManyDirective,
       FindDirective,
       LogDirective,
+      LoginDirective,
       ScopeDirective,
       WhereDirective,
     ]

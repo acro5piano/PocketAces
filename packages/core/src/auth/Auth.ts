@@ -10,7 +10,7 @@ function getSecret() {
   return maybeSecret
 }
 
-export function createToken(uid: string, role: string) {
+export function createToken(uid: string, role: string | null) {
   return sign({ uid, role }, getSecret())
 }
 

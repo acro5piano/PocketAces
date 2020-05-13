@@ -16,11 +16,7 @@ test('graphql#auth', async t => {
       currentUser: User @auth
     }
 
-    # type Mutation {
-    #   login: User @login(as: "User")
-    # }
-
-    type User @authenticable(identify: "email", verify: "passwordHash") {
+    type User {
       id: ID!
       name: String!
       email: String!
@@ -38,6 +34,7 @@ test('graphql#auth', async t => {
     `,
   })
   t.is(undefined, denied.data?.currentUser?.id)
+  t.is('Not Authorized.', denied.errors?.[0]?.message)
 
   const accepted = await t.context.graphql({
     query: gql`
