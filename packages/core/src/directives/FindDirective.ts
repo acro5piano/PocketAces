@@ -5,13 +5,7 @@ export class FindDirective extends BaseDirective<{ table: string }, { id: string
   name = 'find'
 
   resolveField({ currentValue }: DirectiveExecutionChainable) {
-    if (currentValue) {
-      return currentValue
-        .table(this.getDirectiveArgValue('table'))
-        .where({ id: this.getInputArgValue('id') })
-        .first()
-    }
-    return this.database.db
+    return this.queryChain(currentValue)
       .table(this.getDirectiveArgValue('table'))
       .where({ id: this.getInputArgValue('id') })
       .first()

@@ -10,10 +10,8 @@ export class WhereDirective extends BaseDirective<{ table: string; keys?: string
     const where =
       keys.length > 0 ? pick(this.getInputArgs() as any, ...keys) : (this.getInputArgs() as string)
 
-    if (currentValue) {
-      return currentValue.table(this.getDirectiveArgValue('table') as string).where(where)
-    }
-
-    return this.database.db.table(this.getDirectiveArgValue('table') as string).where(where)
+    return this.queryChain(currentValue)
+      .table(this.getDirectiveArgValue('table') as string)
+      .where(where)
   }
 }

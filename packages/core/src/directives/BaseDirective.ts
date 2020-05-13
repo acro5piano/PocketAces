@@ -1,8 +1,9 @@
 import { Service, Inject } from 'typedi'
-import { DatabaseService } from '../services/DatabaseService'
-import { ConfigService } from '../services/ConfigService'
+import { DatabaseService } from 'src/services/DatabaseService'
+import { ConfigService } from 'src/services/ConfigService'
 import { DirectiveExecutionArgs, DirectiveContext } from 'src/contracts/DirectiveContract'
 import { ReloationLoader } from 'src/database/ReloationLoader'
+import Knex from 'knex'
 
 @Service()
 export class BaseDirective<TArgs extends object = object, TInput extends object = object> {
@@ -28,6 +29,13 @@ export class BaseDirective<TArgs extends object = object, TInput extends object 
   setContext(ctx: Partial<DirectiveContext<TArgs, TInput>>): BaseDirective<TArgs, TInput> {
     this.context = { ...this.context, ...ctx }
     return this
+  }
+
+  queryChain(currentValue: Knex | null | undefined) {
+    if (currentValue) {
+      return currentValue
+    }
+    return this.database.db
   }
 
   protected getDirectiveArgValue(name: keyof TArgs) {

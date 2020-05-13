@@ -6,13 +6,8 @@ export class ScopeDirective extends BaseDirective<{ table: string; [k: string]: 
   name = 'scope'
 
   resolveField({ currentValue }: DirectiveExecutionChainable) {
-    const table = this.getDirectiveArgValue('table') as string
-    const where = omit(this.getDirectiveArgs(), 'table')
-
-    if (currentValue) {
-      return currentValue.table(table).where(where)
-    }
-
-    return this.database.db.table(table).where(where)
+    return this.queryChain(currentValue)
+      .table(this.getDirectiveArgValue('table') as string)
+      .where(omit(this.getDirectiveArgs(), 'table'))
   }
 }
