@@ -1,5 +1,3 @@
-require('reflect-metadata')
-
 const PocketAce = require('./build')
 
 class MyDirective extends PocketAce.BaseDirective {
@@ -25,11 +23,11 @@ PocketAce.configureDatabase({
 PocketAce.buildSchema(`
   type Query {
     hello: String! @myDirective
-    users: [User!]! @all
+    users: [User!]! @all(table: "users")
   }
 
   type Mutation {
-    createUser(name: String!): User @create
+    createUser(name: String!): User @create(table: "users")
   }
 
   type User {

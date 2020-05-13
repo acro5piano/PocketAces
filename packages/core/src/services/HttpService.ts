@@ -35,7 +35,10 @@ export class HttpService {
   }
 
   start(port = 3000) {
-    this.server.listen(port)
+    const serverInstance = this.server.listen(port)
+    process.on('exit', () => {
+      serverInstance.close()
+    })
     return this
   }
 }
