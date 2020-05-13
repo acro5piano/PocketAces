@@ -77,7 +77,14 @@ PocketAce.sql(sql).then(() => {
 
 I know the above code is ugly. We'll improve it soon.
 
-Then run `app.js` and open http://localhost:3000
+Then run `node app.js`.
+
+You can now run GraphQL queries to http://localhost:3000
+
+````
+```bash
+curl -XPOST localhost:3000/graphql -d query='{ hello }'
+````
 
 # Directory structure for the Framework
 
@@ -99,3 +106,23 @@ Then run `app.js` and open http://localhost:3000
    `-- unit #
      `-- LoginUserTest.ts #
 ```
+
+# Build with
+
+Main dependencies:
+
+- Koa
+- GraphQL
+- Knex
+- TypeDI
+
+Development:
+
+- TypeScript, ts-node
+- Ava
+- Supertest
+- SQLite
+- Lerna
+- Rollup
+
+Heavily inspired by https://github.com/nuwave/lighthouse
