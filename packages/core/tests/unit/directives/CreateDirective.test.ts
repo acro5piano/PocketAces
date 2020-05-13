@@ -1,27 +1,20 @@
 import 'tests/bootstrapServices'
-import { test, gql } from 'tests/helper'
+import { test, gql, createTestDB } from 'tests/helper'
 import { Schema } from 'src/schema/Schema'
-import { DatabaseService } from 'src/services/DatabaseService'
-import { Container } from 'typedi'
 
 test('@create', async t => {
   const schema = new Schema()
 
-  await Container.get(DatabaseService).db.raw(`
-    create table users (
-      id integer not null primary key autoincrement,
-      name string not null default ''
-    )
-  `)
+  await createTestDB()
 
   schema.buildSchema(gql`
     type Query {
-      user(id: ID!): User @find
+      user(id: ID!): User @find(table: "users")
     }
 
     type Mutation {
-      createUser(name: String!): User @create
-      hello(name: String!): User! @create
+      createUser(name: String!): User @create(table: "users")
+      createPost(userId: ID!, title: String!): User @create(table: "posts")
     }
 
     type User {
@@ -73,4 +66,18 @@ test('@create', async t => {
   })
 
   t.is(create.data?.createUser?.id, get?.data?.user?.id)
+
+  const createPost = await schema.executeGraphQL({
+    query: gql`
+      mutation CreatePost($userId: ID!) {
+        createPost(userId: $userId, title: "Pocket Ace") {
+          id
+        }
+      }
+    `,
+    variables: {
+      userId: get?.data?.user?.id,
+    },
+  })
+  t.truthy(createPost.data?.createPost?.id)
 })

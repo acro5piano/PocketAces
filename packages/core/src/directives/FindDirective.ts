@@ -1,11 +1,12 @@
 import { BaseDirective } from './BaseDirective'
+import { DirectiveExecutionChainable } from 'src/contracts/DirectiveContract'
 
-export class FindDirective extends BaseDirective<{}, { id: string }> {
+export class FindDirective extends BaseDirective<{ table: string }, { id: string }> {
   name = 'find'
 
-  resolveField() {
-    return this.database.db
-      .table('users')
+  resolveField({ currentValue }: DirectiveExecutionChainable) {
+    return this.queryChain(currentValue)
+      .table(this.getDirectiveArgValue('table'))
       .where({ id: this.getInputArgValue('id') })
       .first()
   }

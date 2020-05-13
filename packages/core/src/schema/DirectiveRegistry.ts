@@ -1,10 +1,13 @@
+import { Container } from 'typedi'
 import { DirectiveContract } from 'src/contracts/DirectiveContract'
+
 import { AllDirective } from 'src/directives/AllDirective'
 import { CreateDirective } from 'src/directives/CreateDirective'
+import { HasManyDirective } from 'src/directives/HasManyDirective'
 import { FindDirective } from 'src/directives/FindDirective'
 import { LogDirective } from 'src/directives/LogDirective'
+import { ScopeDirective } from 'src/directives/ScopeDirective'
 import { WhereDirective } from 'src/directives/WhereDirective'
-import { Container } from 'typedi'
 
 export class DirectiveRegistry {
   private directives = new Map<string, DirectiveContract>()
@@ -13,8 +16,10 @@ export class DirectiveRegistry {
     const builtinDirectives = [
       AllDirective,
       CreateDirective,
+      HasManyDirective,
       FindDirective,
       LogDirective,
+      ScopeDirective,
       WhereDirective,
     ]
     builtinDirectives.forEach(directive => {
