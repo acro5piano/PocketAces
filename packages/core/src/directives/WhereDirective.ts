@@ -1,9 +1,9 @@
 import { BaseDirective } from './BaseDirective'
 
-export class WhereDirective extends BaseDirective {
+export class WhereDirective extends BaseDirective<{ table: string }> {
   name = 'where'
 
   resolveField() {
-    return this.database.db.table('users')
+    return this.database.db.table(this.getDirectiveArgValue('table'))
   }
 }

@@ -1,11 +1,12 @@
 import { BaseDirective } from './BaseDirective'
 
-export class CreateDirective extends BaseDirective {
+export class CreateDirective extends BaseDirective<{ table: string }> {
   name = 'create'
 
   async resolveField() {
-    const [id] = await this.database.db('users').insert(this.getInputArgs()).returning('id')
-    const user = await this.database.db('users').where({ id }).first()
-    return user
+    const table = this.getDirectiveArgValue('table')
+    const [id] = await this.database.db(table).insert(this.getInputArgs()).returning('id')
+    const record = await this.database.db(table).where({ id }).first()
+    return record
   }
 }

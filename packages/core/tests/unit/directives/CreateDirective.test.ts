@@ -13,15 +13,23 @@ test('@create', async t => {
       name string not null default ''
     )
   `)
+  await Container.get(DatabaseService).db.raw(`
+    create table posts (
+      id integer not null primary key autoincrement,
+      user_id integer not null,
+      title string not null default '',
+      foreign key("user_id") references "users"("id") on delete cascade
+    )
+  `)
 
   schema.buildSchema(gql`
     type Query {
-      user(id: ID!): User @find
+      user(id: ID!): User @find(table: "users")
     }
 
     type Mutation {
-      createUser(name: String!): User @create
-      hello(name: String!): User! @create
+      createUser(name: String!): User @create(table: "users")
+      createPost(userId: ID!, title: String!): User @create(table: "posts")
     }
 
     type User {
@@ -73,4 +81,18 @@ test('@create', async t => {
   })
 
   t.is(create.data?.createUser?.id, get?.data?.user?.id)
+
+  const createPost = await schema.executeGraphQL({
+    query: gql`
+      mutation CreatePost($userId: ID!) {
+        createPost(userId: $userId, title: "Pocket Ace") {
+          id
+        }
+      }
+    `,
+    variables: {
+      userId: get?.data?.user?.id,
+    },
+  })
+  t.truthy(createPost.data?.createPost?.id)
 })
