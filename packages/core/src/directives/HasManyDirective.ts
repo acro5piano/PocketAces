@@ -5,9 +5,9 @@ export class HasManyDirective extends BaseDirective<{ table: string; joins: stri
   name = 'hasMany'
 
   async resolveField({ parentValue }: DirectiveExecutionArgs<any, { id: string }>) {
-    const rows = await this.database.db
-      .table(this.getDirectiveArgValue('table'))
-      .where({ [this.getDirectiveArgValue('joins')]: parentValue.id })
+    const rows = this.loader
+      .getLoader(this.getDirectiveArgValue('table'), this.getDirectiveArgValue('joins'))
+      .load(parentValue.id)
     return rows
   }
 }

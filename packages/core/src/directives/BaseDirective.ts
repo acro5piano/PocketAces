@@ -2,6 +2,7 @@ import { Service, Inject } from 'typedi'
 import { DatabaseService } from '../services/DatabaseService'
 import { ConfigService } from '../services/ConfigService'
 import { DirectiveExecutionArgs, DirectiveContext } from 'src/contracts/DirectiveContract'
+import { ReloationLoader } from 'src/database/ReloationLoader'
 
 @Service()
 export class BaseDirective<TArgs extends object = object, TInput extends object = object> {
@@ -14,11 +15,12 @@ export class BaseDirective<TArgs extends object = object, TInput extends object 
   constructor(
     @Inject() protected readonly database: DatabaseService,
     @Inject() protected readonly config: ConfigService,
+    @Inject() protected readonly loader: ReloationLoader,
   ) {}
 
   forge(ctx: Partial<DirectiveContext<TArgs, TInput>>): BaseDirective {
     // @ts-ignore
-    const newInstance = new this.constructor(this.database, this.config)
+    const newInstance = new this.constructor(this.database, this.config, this.loader)
     newInstance.setContext(ctx)
     return newInstance
   }
