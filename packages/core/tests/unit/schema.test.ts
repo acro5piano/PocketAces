@@ -49,7 +49,7 @@ test('schema#executeGraphQL', async t => {
     type User {
       id: ID!
       name: String!
-      posts: [Post!]! @hasMany
+      posts: [Post!]!
     }
 
     type Post {

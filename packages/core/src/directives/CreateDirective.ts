@@ -1,16 +1,10 @@
-import { Service, Inject } from 'typedi'
-import { DatabaseService } from 'src/services/DatabaseService'
-import { DirectiveContract } from 'src/contracts/DirectiveContract'
+import { BaseDirective } from './BaseDirective'
 
-@Service()
-export class CreateDirective implements DirectiveContract {
-  @Inject()
-  database!: DatabaseService
-
+export class CreateDirective extends BaseDirective {
   name = 'create'
 
-  async resolveField({ inputArgs }: any) {
-    const [id] = await this.database.db('users').insert(inputArgs).returning('id')
+  async resolveField() {
+    const [id] = await this.database.db('users').insert(this.getInputArgs()).returning('id')
     const user = await this.database.db('users').where({ id }).first()
     return user
   }

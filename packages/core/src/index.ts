@@ -1,9 +1,12 @@
+import { Container } from 'typedi'
 import { HttpService } from 'src/services/HttpService'
 import { GraphQLService } from 'src/services/GraphQLService'
 import { ConfigService } from 'src/services/ConfigService'
 import { DatabaseService } from 'src/services/DatabaseService'
-import { Container } from 'typedi'
 
+export { BaseDirective } from 'src/directives/BaseDirective'
+
+export const registerDirective = Container.get(GraphQLService).registerDirective
 export const registerResolver = Container.get(GraphQLService).registerResolver
 export const buildSchema = Container.get(GraphQLService).buildSchema
 export const configureDatabase = Container.get(ConfigService).configureDatabase

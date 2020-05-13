@@ -1,15 +1,12 @@
-import { Service, Inject } from 'typedi'
-import { DatabaseService } from 'src/services/DatabaseService'
-import { DirectiveContract } from 'src/contracts/DirectiveContract'
+import { BaseDirective } from './BaseDirective'
 
-@Service()
-export class FindDirective implements DirectiveContract {
-  @Inject()
-  database!: DatabaseService
-
+export class FindDirective extends BaseDirective<{}, { id: string }> {
   name = 'find'
 
-  resolveField({ inputArgs }: any) {
-    return this.database.db.table('users').where({ id: inputArgs.id }).first()
+  resolveField() {
+    return this.database.db
+      .table('users')
+      .where({ id: this.getInputArgValue('id') })
+      .first()
   }
 }
