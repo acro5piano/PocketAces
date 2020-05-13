@@ -14,7 +14,7 @@ export function createToken(uid: string, role: string | null) {
   return sign({ uid, role }, getSecret())
 }
 
-export function getUserFromToken(token: string): AuthContext {
+export function getUserFromToken(token: string): AuthContext['user'] {
   return verify(token, getSecret()) as any
 }
 

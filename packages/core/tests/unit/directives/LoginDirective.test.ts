@@ -1,6 +1,7 @@
 import 'tests/bootstrapServices'
 import { test, gql, createTestDB } from 'tests/helper'
 import { Schema } from 'src/schema/Schema'
+import { getUserFromToken } from 'src/auth/Auth'
 
 test.beforeEach(async t => {
   await createTestDB()
@@ -16,6 +17,8 @@ test.beforeEach(async t => {
 
 test('@login - success', async t => {
   const schema = new Schema()
+
+  const user = await t.context.db('users').first()
 
   schema.buildSchema(gql`
     type Mutation {
@@ -53,6 +56,18 @@ test('@login - success', async t => {
   })
   t.truthy(get.data?.login?.token)
   t.truthy(get.data?.login?.refreshToken)
+
+  const iat = Math.floor(Date.now() / 1000) // TODO: not consistent
+  t.deepEqual(getUserFromToken(get.data?.login?.token), {
+    uid: user?.id,
+    role: 'User',
+    iat,
+  })
+  t.deepEqual(getUserFromToken(get.data?.login?.refreshToken), {
+    uid: user?.id,
+    role: 'refreshToken',
+    iat,
+  })
 })
 
 test('@login - failed', async t => {
