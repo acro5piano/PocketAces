@@ -2,6 +2,7 @@ import { Container } from 'typedi'
 import { DirectiveContract } from 'src/contracts/DirectiveContract'
 
 import { AllDirective } from 'src/directives/AllDirective'
+import { AuthDirective } from 'src/directives/AuthDirective'
 import { CreateDirective } from 'src/directives/CreateDirective'
 import { HasManyDirective } from 'src/directives/HasManyDirective'
 import { FindDirective } from 'src/directives/FindDirective'
@@ -15,6 +16,7 @@ export class DirectiveRegistry {
   constructor() {
     const builtinDirectives = [
       AllDirective,
+      AuthDirective,
       CreateDirective,
       HasManyDirective,
       FindDirective,
