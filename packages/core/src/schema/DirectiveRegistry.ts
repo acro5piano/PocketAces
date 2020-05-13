@@ -6,6 +6,7 @@ import { CreateDirective } from 'src/directives/CreateDirective'
 import { HasManyDirective } from 'src/directives/HasManyDirective'
 import { FindDirective } from 'src/directives/FindDirective'
 import { LogDirective } from 'src/directives/LogDirective'
+import { ScopeDirective } from 'src/directives/ScopeDirective'
 import { WhereDirective } from 'src/directives/WhereDirective'
 
 export class DirectiveRegistry {
@@ -18,6 +19,7 @@ export class DirectiveRegistry {
       HasManyDirective,
       FindDirective,
       LogDirective,
+      ScopeDirective,
       WhereDirective,
     ]
     builtinDirectives.forEach(directive => {

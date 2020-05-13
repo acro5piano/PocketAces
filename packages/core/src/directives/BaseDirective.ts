@@ -42,6 +42,10 @@ export class BaseDirective<TArgs extends object = object, TInput extends object 
     return this.context.inputArgs
   }
 
+  protected getDirectiveArgs() {
+    return this.context.directiveArgs
+  }
+
   protected db() {
     return this.database.db
   }

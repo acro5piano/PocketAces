@@ -39,7 +39,6 @@ test('schema#executeGraphQL', async t => {
       mockUsers: [User!]!
       users: [User!]! @all @log
       user(id: ID!): User! @find
-      activeUsers: [User!]! @where(isActive: true)
     }
 
     type Mutation {
@@ -89,22 +88,6 @@ test('schema#executeGraphQL', async t => {
 
   res = await schema.executeGraphQL<any>({
     query: gql`
-      query GetActiveUsers {
-        activeUsers {
-          id
-          name
-          posts {
-            id
-            title
-          }
-        }
-      }
-    `,
-  })
-  t.deepEqual(res.data?.activeUsers, mockUsers)
-
-  res = await schema.executeGraphQL<any>({
-    query: gql`
       query GetUsers {
         users {
           id
@@ -127,7 +110,6 @@ test('schema#executeGraphQL', async t => {
         mockUsers: [User!]!
         users: [User!]!
         user(id: ID!): User!
-        activeUsers: [User!]!
       }
 
       type User {
