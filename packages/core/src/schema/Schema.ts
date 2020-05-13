@@ -7,6 +7,8 @@ import {
   InputObjectTypeDefinitionNode,
   FieldDefinitionNode,
   TypeNode,
+  ValueNode,
+  ArgumentNode,
   GraphQLType,
   GraphQLNonNull,
   GraphQLFieldConfig,
@@ -14,6 +16,8 @@ import {
   GraphQLSchema,
   GraphQLString,
   GraphQLID,
+  GraphQLBoolean,
+  GraphQLFloat,
   GraphQLInt,
   GraphQLObjectType,
   GraphQLInputObjectType,
@@ -24,6 +28,7 @@ import { Resolver, ResolverRegistry } from './ResolverRegistry'
 import { DirectiveRegistry } from './DirectiveRegistry'
 import { debug } from 'src/utils'
 import { DirectiveContract } from 'src/contracts/DirectiveContract'
+import { PrimitiveTypeArray } from 'src/utils'
 
 type AnyGraphQLFieldConfig = GraphQLFieldConfig<any, any>
 
@@ -197,7 +202,7 @@ export class Schema {
         return {
           ...args,
           // @ts-ignore
-          [arg.name.value]: arg.value.value,
+          [arg.name.value]: this.convertArgumentNodeToJs(arg),
         }
       }, {})
 
@@ -205,6 +210,39 @@ export class Schema {
         directiveArgs,
       })
     })
+  }
+
+  private convertValueNodeToJs(node: ValueNode): PrimitiveTypeArray {
+    if (node.kind === 'Variable' || node.kind === 'ObjectValue') {
+      throw new Error(`type note ${node.kind} not supported yet`)
+    }
+    if (node.kind === 'NullValue') {
+      return null
+    }
+    if (node.kind === 'ListValue') {
+      return node.values.map(this.convertValueNodeToJs)
+    }
+    if (typeof node.value === 'string' || typeof node.value === 'boolean') {
+      return node.value
+    }
+    return (node.value as any).value
+  }
+
+  private convertArgumentNodeToJs(node: ArgumentNode) {
+    if (node.value.kind === 'ListValue') {
+      return node.value.values.map(this.convertValueNodeToJs)
+    }
+    if (
+      node.value.kind === 'StringValue' ||
+      node.value.kind === 'IntValue' ||
+      node.value.kind === 'FloatValue' ||
+      node.value.kind === 'BooleanValue'
+    ) {
+      return node.value.value
+    }
+    return this.typeRegistry.get(node.name.value).toString()
+    debug(node)
+    throw new Error(`${(node as any).kind} cannot be resolved.`)
   }
 
   private resolveArguments(definition: FieldDefinitionNode) {
@@ -238,6 +276,12 @@ export class Schema {
       }
       if (type.name.value === 'ID') {
         return GraphQLID
+      }
+      if (type.name.value === 'Boolean') {
+        return GraphQLBoolean
+      }
+      if (type.name.value === 'Float') {
+        return GraphQLFloat
       }
       return this.typeRegistry.get(type.name.value)
     }

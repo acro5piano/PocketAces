@@ -54,7 +54,8 @@ export async function createTestDB() {
   await Container.get(DatabaseService).db.raw(`
     create table users (
       id integer not null primary key autoincrement,
-      name string not null default ''
+      name string not null default '',
+      is_active boolean not null default false
     )
   `)
   await Container.get(DatabaseService).db.raw(`

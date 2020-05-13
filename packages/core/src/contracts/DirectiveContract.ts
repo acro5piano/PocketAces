@@ -1,7 +1,14 @@
 import { ObjectTypeDefinitionNode, FieldDefinitionNode, GraphQLResolveInfo } from 'graphql'
+import Knex from 'knex'
 
 export interface DirectiveExecutionArgs<TValue = any, TParent = any> {
   currentValue: TValue
+  parentValue: TParent
+  resolveInfo: GraphQLResolveInfo
+}
+
+export interface DirectiveExecutionChainable<TParent = any> {
+  currentValue: Knex | null
   parentValue: TParent
   resolveInfo: GraphQLResolveInfo
 }
