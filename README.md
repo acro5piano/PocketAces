@@ -81,10 +81,9 @@ Then run `node app.js`.
 
 You can now run GraphQL queries to http://localhost:3000
 
-````
 ```bash
 curl -XPOST localhost:3000/graphql -d query='{ hello }'
-````
+```
 
 # Directory structure for the Framework
 
