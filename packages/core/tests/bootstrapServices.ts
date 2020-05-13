@@ -20,8 +20,6 @@ test.beforeEach(t => {
   t.context.db = Container.get(DatabaseService).db
 })
 
-test.afterEach(async () => {
-  await Container.get(DatabaseService).db('users').truncate()
-  await Container.get(DatabaseService).db('posts').truncate()
-  await Container.get(ReloationLoader).clear()
+test.afterEach(() => {
+  Container.get(ReloationLoader).clear()
 })
