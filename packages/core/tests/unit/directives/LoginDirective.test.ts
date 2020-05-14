@@ -61,7 +61,7 @@ test('@login - success', async (t) => {
   const loginUser = getUserFromToken(get.data?.login?.token)
   const refreshUser = getUserFromToken(get.data?.login?.refreshToken)
 
-  t.is(user?.id, loginUser.uid)
+  t.is(user?.id.toString(), loginUser.uid)
   t.is('User', loginUser.role)
   t.is(iat, loginUser.iat)
   t.is('login', loginUser.type)
