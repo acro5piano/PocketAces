@@ -8,6 +8,7 @@
   "types": "build/src/index.d.ts",
   "scripts": {
     "test": "ava --serial",
+    "test:coverage": "nyc --reporter json ava --serial",
     "build": "rm -rf build && yarn rollup -c",
     "prepublish": "yarn build",
     "r": "node -r ts-node/register/transpile-only -r tsconfig-paths/register -r ./src/bootstrap",
@@ -36,6 +37,7 @@
     "@types/supertest": "^2.0.9",
     "ava": "^3.8.2",
     "graphql": "^15.0.0",
+    "nyc": "^15.0.1",
     "pg": "^8.1.0",
     "rollup": "^2.9.1",
     "rollup-plugin-typescript2": "^0.27.0",
