@@ -1,5 +1,6 @@
 ![test](https://github.com/acro5piano/PocketAce/workflows/test/badge.svg)
 [![npm version](https://badge.fury.io/js/%40pocket-ace%2Fcore.svg)](https://badge.fury.io/js/%40pocket-ace%2Fcore)
+[![codecov](https://codecov.io/gh/acro5piano/PocketAce/branch/master/graph/badge.svg)](https://codecov.io/gh/acro5piano/PocketAce)
 
 # PocketAce
 
