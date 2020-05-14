@@ -12,7 +12,7 @@ export interface DirectiveExecutionArgs<TValue = any, TParent = any> {
 }
 
 export interface DirectiveExecutionChainable<TParent = any> {
-  currentValue: Knex | null
+  currentValue: Knex.QueryBuilder | null
   parentValue: TParent
   resolveInfo: GraphQLResolveInfo
 }
