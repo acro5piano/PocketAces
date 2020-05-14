@@ -10,7 +10,19 @@ export class CanDirective extends BaseDirective<{
 }> {
   name = 'can'
 
-  resolveField({ currentValue, resolveInfo }: DirectiveExecutionArgs) {
+  resolveField({ currentValue }: DirectiveExecutionArgs) {
+    const eq = this.getDirectiveArgValue('eq')
+    if (typeof eq === 'string') {
+      return this.queryChain(currentValue).where(eq, this.getCurrentUser().uid)
+    }
+
+    const roles = this.getDirectiveArgValue('roles')
+    if (Array.isArray(roles)) {
+      if (!roles.includes(this.getCurrentUser().role)) {
+        throw new Error('Not authorized to access this resource.')
+      }
+    }
+
     return currentValue
   }
 }
