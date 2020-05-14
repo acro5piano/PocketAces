@@ -1,7 +1,7 @@
 import { BaseDirective } from './BaseDirective'
 import { DirectiveExecutionArgs } from 'src/contracts/DirectiveContract'
 import { typeToTable } from 'src/database/Convension'
-import { check, createToken } from 'src/auth/Auth'
+import * as Auth from 'src/auth/Auth'
 
 export class LoginDirective extends BaseDirective<
   {
@@ -33,15 +33,14 @@ export class LoginDirective extends BaseDirective<
     }
 
     const passwordInput = this.getInputArgValue('password')
-    if (!(await check(passwordInput, user[passwordColumn]))) {
+    if (!(await Auth.check(passwordInput, user[passwordColumn]))) {
       throw new Error(invalidMessage)
     }
 
-    const token = await createToken(
+    const { token, refreshToken } = await Auth.createTokens(
       user.id,
       this.getDirectiveArgValue('role') || null,
     )
-    const refreshToken = await createToken(user.id, 'refreshToken')
 
     return { token, refreshToken }
   }

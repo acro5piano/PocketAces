@@ -1,8 +1,8 @@
 import { compare, hash } from 'bcrypt'
 import { sign, verify } from 'jsonwebtoken'
-import { AuthContext } from 'src/auth/AuthContext'
+import { JwtPayload } from 'src/auth/AuthContext'
 
-function getSecret() {
+export function getSecret() {
   const maybeSecret = process.env.POCKET_ACE_JWT_SECRET
   if (!maybeSecret) {
     throw new Error('env POCKET_ACE_JWT_SECRET is not defined.')
@@ -10,11 +10,35 @@ function getSecret() {
   return maybeSecret
 }
 
-export function createToken(uid: string, role: string | null) {
-  return sign({ uid, role }, getSecret())
+const jwtTokenExpiresIn = {
+  token: process.env.JWT_TOKEN_TTL || '7days',
+  refreshToken: process.env.JWT_TOKEN_TTL || '30days',
 }
 
-export function getUserFromToken(token: string): AuthContext['user'] {
+export function createTokens(uid: string | number, role: string | null) {
+  return {
+    token: createToken(String(uid), role),
+    refreshToken: createRefreshToken(String(uid), role),
+  }
+}
+
+export function createToken(
+  uid: string,
+  role: string | null,
+  expiresIn: string | number = jwtTokenExpiresIn.token,
+) {
+  return sign({ uid, role, type: 'login' }, getSecret(), { expiresIn })
+}
+
+export function createRefreshToken(
+  uid: string,
+  role: string | null,
+  expiresIn: string | number = jwtTokenExpiresIn.refreshToken,
+) {
+  return sign({ uid, role, type: 'refresh' }, getSecret(), { expiresIn })
+}
+
+export function getUserFromToken(token: string): JwtPayload {
   return verify(token, getSecret()) as any
 }
 
