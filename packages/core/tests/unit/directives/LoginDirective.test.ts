@@ -3,7 +3,7 @@ import { test, gql, createTestDB } from 'tests/helper'
 import { Schema } from 'src/schema/Schema'
 import { getUserFromToken } from 'src/auth/Auth'
 
-test.beforeEach(async t => {
+test.beforeEach(async (t) => {
   await createTestDB()
 
   const passwordHash =
@@ -15,7 +15,7 @@ test.beforeEach(async t => {
     .returning('id')
 })
 
-test('@login - success', async t => {
+test('@login - success', async (t) => {
   const schema = new Schema()
 
   const user = await t.context.db('users').first()
@@ -26,7 +26,7 @@ test('@login - success', async t => {
         @login(
           table: "users"
           role: "User"
-          identify: "email"
+          identity: "email"
           password: "password"
           hashedColumn: "passwordHash"
         )
@@ -58,19 +58,21 @@ test('@login - success', async t => {
   t.truthy(get.data?.login?.refreshToken)
 
   const iat = Math.floor(Date.now() / 1000) // TODO: not consistent
-  t.deepEqual(getUserFromToken(get.data?.login?.token), {
-    uid: user?.id,
-    role: 'User',
-    iat,
-  })
-  t.deepEqual(getUserFromToken(get.data?.login?.refreshToken), {
-    uid: user?.id,
-    role: 'refreshToken',
-    iat,
-  })
+  const loginUser = getUserFromToken(get.data?.login?.token)
+  const refreshUser = getUserFromToken(get.data?.login?.refreshToken)
+
+  t.is(user?.id.toString(), loginUser.uid)
+  t.is('User', loginUser.role)
+  t.is(iat, loginUser.iat)
+  t.is('login', loginUser.type)
+
+  t.is(user?.id.toString(), refreshUser.uid)
+  t.is('User', refreshUser.role)
+  t.is(iat, refreshUser.iat)
+  t.is('refresh', refreshUser.type)
 })
 
-test('@login - failed', async t => {
+test('@login - failed', async (t) => {
   const schema = new Schema()
 
   schema.buildSchema(gql`
@@ -79,7 +81,7 @@ test('@login - failed', async t => {
         @login(
           table: "users"
           role: "User"
-          identify: "email"
+          identity: "email"
           password: "password"
           hashedColumn: "passwordHash"
         )

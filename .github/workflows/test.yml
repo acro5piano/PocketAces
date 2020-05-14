@@ -17,4 +17,8 @@ jobs:
       - run: yarn install
       - run: yarn lerna bootstrap
       - run: yarn lerna run tsc
-      - run: yarn lerna run test
+      - run: mkdir coverage || true
+      - run: yarn lerna run test:coverage
+      - run: cd packages/core && bash <(curl -s https://codecov.io/bash)
+        env:
+          CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}

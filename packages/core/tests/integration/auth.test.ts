@@ -4,7 +4,7 @@ import { Container } from 'typedi'
 import { GraphQLService } from 'src/services/GraphQLService'
 import * as Auth from 'src/auth/Auth'
 
-test('graphql#auth', async t => {
+test('graphql#auth', async (t) => {
   await createTestDB()
   const [id] = await t.context
     .db('users')
@@ -45,7 +45,21 @@ test('graphql#auth', async t => {
         }
       }
     `,
-    authorization: Auth.createToken(id, 'User'),
+    authorization: Auth.createToken(id, 'User', '30s'),
   })
   t.is(id.toString(), accepted.data?.currentUser?.id)
+  t.is('Kazuya', accepted.data?.currentUser?.name)
+
+  const outdated = await t.context.graphql({
+    query: gql`
+      query {
+        currentUser {
+          id
+        }
+      }
+    `,
+    authorization: Auth.createToken(id, 'User', 0),
+  })
+  t.falsy(outdated.data?.currentUser?.id)
+  t.is('jwt_expired', outdated.errors?.[0]?.message)
 })

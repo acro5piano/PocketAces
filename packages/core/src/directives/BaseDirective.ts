@@ -47,11 +47,11 @@ export class BaseDirective<
     return this
   }
 
-  queryChain(currentValue: Knex | null | undefined) {
+  queryChain(currentValue: Knex.QueryBuilder | null | undefined) {
     if (currentValue) {
       return currentValue
     }
-    return this.database.db
+    return (this.database.db as any) as Knex.QueryBuilder
   }
 
   protected getDirectiveArgValue(name: keyof TArgs) {
