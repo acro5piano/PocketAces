@@ -29,9 +29,11 @@ import { DirectiveRegistry } from './DirectiveRegistry'
 import { debug } from 'src/utils'
 import { DirectiveContract } from 'src/contracts/DirectiveContract'
 import { PrimitiveTypeArray } from 'src/utils'
+import { AuthContext } from 'src/auth/AuthContext'
 import { Request } from 'koa'
 
 type AnyGraphQLFieldConfig = GraphQLFieldConfig<any, any>
+type GraphQLContext = Request & AuthContext
 
 function isRootNode(node: ObjectTypeDefinitionNode) {
   return ['Query', 'Mutation', 'Subscription'].includes(node.name.value)
@@ -60,7 +62,7 @@ export class Schema {
     return printSchema(this.schema)
   }
 
-  async executeGraphQL<V, C = Request>({
+  async executeGraphQL<V, C = GraphQLContext>({
     query,
     variables,
     context,
@@ -183,7 +185,7 @@ export class Schema {
     return (
       parentValue: P,
       inputArgs: T,
-      context: { user?: { id: number; role: string } },
+      context: GraphQLContext,
       resolveInfo: GraphQLResolveInfo,
     ) => {
       let value = null

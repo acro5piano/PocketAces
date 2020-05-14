@@ -26,7 +26,7 @@ test('@login - success', async (t) => {
         @login(
           table: "users"
           role: "User"
-          identify: "email"
+          identity: "email"
           password: "password"
           hashedColumn: "passwordHash"
         )
@@ -81,7 +81,7 @@ test('@login - failed', async (t) => {
         @login(
           table: "users"
           role: "User"
-          identify: "email"
+          identity: "email"
           password: "password"
           hashedColumn: "passwordHash"
         )

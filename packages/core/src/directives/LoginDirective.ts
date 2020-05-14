@@ -7,7 +7,7 @@ export class LoginDirective extends BaseDirective<
   {
     table: string
     role?: string
-    identify: string
+    identity: string
     hashedColumn: string
     password: string
   },
@@ -21,7 +21,7 @@ export class LoginDirective extends BaseDirective<
       resolveInfo.returnType,
     )
     const invalidMessage = 'User not found, or password is invalid.'
-    const idColumn = this.getDirectiveArgValue('identify') || 'email'
+    const idColumn = this.getDirectiveArgValue('identity') || 'email'
     const passwordColumn =
       this.getDirectiveArgValue('hashedColumn') || 'passwordHash'
     const user = await this.db
