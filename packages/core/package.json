@@ -15,8 +15,11 @@
     "e": "node -r ts-node/register/transpile-only -r tsconfig-paths/register -r ./src/bootstrap -pe"
   },
   "dependencies": {
+    "@types/dedent": "^0.7.0",
     "bcrypt": "^4.0.1",
+    "boxen": "^4.2.0",
     "dataloader": "^2.0.0",
+    "dedent": "^0.7.0",
     "jsonwebtoken": "^8.5.1",
     "knex": "^0.21.1",
     "knex-stringcase": "^1.4.1",
@@ -25,7 +28,8 @@
     "koa-bodyparser": "^4.3.0",
     "pluralize": "^8.0.0",
     "reflect-metadata": "^0.1.13",
-    "typedi": "^0.8.0"
+    "typedi": "^0.8.0",
+    "winston": "^3.2.1"
   },
   "devDependencies": {
     "@types/bcrypt": "^3.0.0",
