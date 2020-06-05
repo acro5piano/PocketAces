@@ -1,21 +1,13 @@
-import { BaseDirective } from './BaseDirective'
 import { typeToTable } from 'src/database/Convension'
-import { DirectiveExecutionChainable } from 'src/contracts/DirectiveContract'
 import { omit } from 'src/utils'
+import { Directive } from 'src/contracts/DirectiveContract'
 
-export class ScopeDirective extends BaseDirective<
-  { table: string; [k: string]: any },
-  {}
-> {
-  name = 'scope'
-
-  resolveField({ currentValue, resolveInfo }: DirectiveExecutionChainable) {
-    const table = typeToTable(
-      this.getDirectiveArgValue('table'),
-      resolveInfo.returnType,
-    )
-    return this.queryChain(currentValue)
-      .table(table)
-      .where(omit(this.getDirectiveArgs(), 'table'))
-  }
+const scope: Directive<{ table?: string }> = ({ args, getQueryChain }) => ({
+  resolveInfo,
+  currentValue,
+}) => {
+  const table = typeToTable(args.table, resolveInfo.returnType)
+  return getQueryChain(currentValue).table(table).where(omit(args, 'table'))
 }
+
+export default scope

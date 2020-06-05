@@ -11,7 +11,7 @@ export interface DirectiveExecutionArgs<
   TInput extends object = object,
   TContext extends object = object
 > {
-  currentValue: Knex.QueryBuilder | null | TValue
+  currentValue: Knex.QueryBuilder | null | void | TValue
   parentValue: TParent
   resolveInfo: GraphQLResolveInfo
   field: FieldDefinitionNode
@@ -37,4 +37,4 @@ export type Directive<
   initArgs: DirectiveInit<TInitArgs>,
 ) => (
   executionArgs: DirectiveExecutionArgs<TValue, TParent, TInput, TContext>,
-) => TNext | Promise<TNext> | void | Promise<void>
+) => TNext | Promise<void | null | TNext>
