@@ -1,9 +1,10 @@
 import 'tests/bootstrapServices'
+import { Container } from 'typedi'
 import { test, gql, createTestDB } from 'tests/helper'
 import { Schema } from 'src/schema/Schema'
 
 test('@create', async (t) => {
-  const schema = new Schema()
+  const schema = Container.get(Schema)
 
   await createTestDB()
 

@@ -1,16 +1,17 @@
 import 'tests/bootstrapServices'
+import { Container } from 'typedi'
 import { test, gql, createTestDB } from 'tests/helper'
 import { Schema } from 'src/schema/Schema'
 
-test.beforeEach(async t => {
+test.beforeEach(async (t) => {
   await createTestDB()
   await t.context.db('users').insert({ name: 'Kazuya', isActive: false })
   await t.context.db('users').insert({ name: 'Yuta', isActive: false })
   await t.context.db('users').insert({ name: 'Ayana', isActive: false })
 })
 
-test('@where', async t => {
-  const schema = new Schema()
+test('@where', async (t) => {
+  const schema = Container.get(Schema)
 
   schema.buildSchema(gql`
     type Query {
@@ -37,8 +38,8 @@ test('@where', async t => {
   t.is('Kazuya', get.data?.users?.[0]?.name)
 })
 
-test('@where pipes @find', async t => {
-  const schema = new Schema()
+test('@where pipes @find', async (t) => {
+  const schema = Container.get(Schema)
   const [{ id }] = await t.context
     .db('users')
     .select('id')

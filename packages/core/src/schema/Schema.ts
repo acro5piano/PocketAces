@@ -234,7 +234,18 @@ export class Schema {
         }
       }, {})
 
-      return initDirective({ args: directiveArgs })
+      const getQueryChain = (currentValue: any) => {
+        if (currentValue) {
+          return currentValue
+        }
+        return this.database.db
+      }
+
+      return initDirective({
+        args: directiveArgs,
+        db: this.database.db,
+        getQueryChain,
+      })
     })
   }
 

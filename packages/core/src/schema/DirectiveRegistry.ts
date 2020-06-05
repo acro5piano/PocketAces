@@ -1,4 +1,4 @@
-import { DirectiveContract } from 'src/contracts/DirectiveContract'
+import { Directive } from 'src/contracts/DirectiveContract'
 
 import { AllDirective } from 'src/directives/AllDirective'
 import { AuthDirective } from 'src/directives/AuthDirective'
@@ -10,7 +10,7 @@ import { LogDirective } from 'src/directives/LogDirective'
 import { LoginDirective } from 'src/directives/LoginDirective'
 import { ScopeDirective } from 'src/directives/ScopeDirective'
 import { UpdateDirective } from 'src/directives/UpdateDirective'
-import { WhereDirective } from 'src/directives/WhereDirective'
+import WhereDirective from 'src/directives/WhereDirective'
 
 const builtinDirectives = [
   AllDirective,
@@ -27,7 +27,7 @@ const builtinDirectives = [
 ]
 
 export class DirectiveRegistry {
-  private directives = new Map<string, DirectiveContract>()
+  private directives = new Map<string, Directive>()
 
   constructor() {
     builtinDirectives.forEach((directive) => {
@@ -37,7 +37,7 @@ export class DirectiveRegistry {
     })
   }
 
-  register(directive: DirectiveContract) {
+  register(directive: Directive) {
     this.directives.set(directive.name, directive)
   }
 
