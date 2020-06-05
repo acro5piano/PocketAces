@@ -1,6 +1,6 @@
 import { Directive } from 'src/contracts/DirectiveContract'
 
-import { AllDirective } from 'src/directives/AllDirective'
+import AllDirective from 'src/directives/AllDirective'
 import { AuthDirective } from 'src/directives/AuthDirective'
 import { CanDirective } from 'src/directives/CanDirective'
 import CreateDirective from 'src/directives/CreateDirective'
@@ -8,7 +8,7 @@ import { HasManyDirective } from 'src/directives/HasManyDirective'
 import FindDirective from 'src/directives/FindDirective'
 import { LogDirective } from 'src/directives/LogDirective'
 import { LoginDirective } from 'src/directives/LoginDirective'
-import { ScopeDirective } from 'src/directives/ScopeDirective'
+import ScopeDirective from 'src/directives/ScopeDirective'
 import { UpdateDirective } from 'src/directives/UpdateDirective'
 import WhereDirective from 'src/directives/WhereDirective'
 
@@ -33,7 +33,6 @@ export class DirectiveRegistry {
     builtinDirectives.forEach((directive) => {
       // @ts-ignore
       this.register(directive)
-      // this.register(Container.get(directive))
     })
   }
 

@@ -202,6 +202,7 @@ export class Schema {
       if (specifiedResolver) {
         value = specifiedResolver(parentValue, null, inputArgs, null as any)
       }
+
       return directives.reduce((currentValue, directive) => {
         return directive({
           field,
@@ -211,6 +212,7 @@ export class Schema {
           currentValue,
           resolveInfo,
           parentValue,
+          queryChain: currentValue || this.database.db,
         })
       }, value)
     }
@@ -234,17 +236,9 @@ export class Schema {
         }
       }, {})
 
-      const getQueryChain = (currentValue: any) => {
-        if (currentValue) {
-          return currentValue
-        }
-        return this.database.db
-      }
-
       return initDirective({
         args: directiveArgs,
         db: this.database.db,
-        getQueryChain,
       })
     })
   }

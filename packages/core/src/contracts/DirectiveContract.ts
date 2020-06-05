@@ -18,12 +18,12 @@ export interface DirectiveExecutionArgs<
   parent: ObjectTypeDefinitionNode
   inputArgs: TInput
   context: TContext
+  queryChain: Knex.QueryBuilder
 }
 
 export interface DirectiveInit<TArgs extends object> {
   args: TArgs
   db: Knex
-  getQueryChain: (v: any) => Knex.QueryBuilder
 }
 
 export type Directive<
