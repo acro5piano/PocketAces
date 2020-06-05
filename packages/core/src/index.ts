@@ -4,8 +4,8 @@ import { HttpService } from 'src/services/HttpService'
 import { GraphQLService } from 'src/services/GraphQLService'
 import { ConfigService } from 'src/services/ConfigService'
 import { DatabaseService } from 'src/services/DatabaseService'
-
 export { BaseDirective } from 'src/directives/BaseDirective'
+import { showBoxMessage } from 'src/utils'
 
 export const registerDirective = Container.get(GraphQLService).registerDirective
 export const registerResolver = Container.get(GraphQLService).registerResolver
@@ -18,6 +18,13 @@ export function initialize() {
 }
 
 export async function runApplication() {
-  Container.get(HttpService).initialize().start(3000)
+  const port = Number(process.env.PORT || 3000)
+  Container.get(HttpService).initialize().start(port)
+  showBoxMessage`
+    PocketAce is Running
+
+    - Listening:     http://0.0.0.0:${port}
+    - GraphQL URL:   http://0.0.0.0:${port}/graphql
+  `
   return Container.get(HttpService).server
 }

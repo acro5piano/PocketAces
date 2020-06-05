@@ -1,3 +1,6 @@
+import boxen from 'boxen'
+import dedent from 'dedent'
+
 function truty(a: any) {
   if (Array.isArray(a) && a.length > 0) {
     return true
@@ -38,4 +41,14 @@ export function omit<T, K extends keyof T>(obj: T, ...keys: K[]): Omit<T, K> {
     }
   }
   return picked
+}
+
+export function showBoxMessage(message: any, ...vars: any) {
+  console.log(
+    boxen(dedent(message, ...vars), {
+      padding: 1,
+      margin: 1,
+      borderColor: 'cyan',
+    }),
+  )
 }
