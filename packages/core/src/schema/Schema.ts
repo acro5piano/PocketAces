@@ -193,18 +193,16 @@ export class Schema {
         value = specifiedResolver(parentValue, null, inputArgs, null as any)
       }
       return directives.reduce((currentValue, directive) => {
-        return directive
-          .setParameters({
-            field,
-            parent,
-            context,
-            inputArgs,
-          })
-          .resolveField({
-            currentValue,
-            resolveInfo,
-            parentValue,
-          })
+        console.log(directive)
+        return directive({
+          field,
+          parent,
+          context,
+          inputArgs,
+          currentValue,
+          resolveInfo,
+          parentValue,
+        })
       }, value)
     }
   }
@@ -229,9 +227,9 @@ export class Schema {
         }
       }, {})
 
-      return singletonDirective.forge({
-        directiveArgs,
-      })
+      console.log(singletonDirective)
+
+      return singletonDirective(directiveArgs)
     })
   }
 

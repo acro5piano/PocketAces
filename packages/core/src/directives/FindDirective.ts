@@ -19,3 +19,7 @@ export class FindDirective extends BaseDirective<
       .first()
   }
 }
+
+const find = (forgeArgs) => ({}: DirectiveExecutionArgs & any) => {}
+
+export default find
