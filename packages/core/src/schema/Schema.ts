@@ -1,3 +1,6 @@
+import { DatabaseService } from 'src/services/DatabaseService'
+import { Service, Inject } from 'typedi'
+import { ReloationLoader } from 'src/database/ReloationLoader'
 import {
   parse,
   graphql,
@@ -27,7 +30,7 @@ import { TypeRegistry } from './TypeRegistry'
 import { Resolver, ResolverRegistry } from './ResolverRegistry'
 import { DirectiveRegistry } from './DirectiveRegistry'
 import { debug } from 'src/utils'
-import { DirectiveContract } from 'src/contracts/DirectiveContract'
+import { Directive } from 'src/contracts/DirectiveContract'
 import { PrimitiveTypeArray } from 'src/utils'
 import { AuthContext } from 'src/auth/AuthContext'
 import { Request } from 'koa'
@@ -45,7 +48,14 @@ interface GraphQLExecutionArgs<V, C> {
   context?: C
 }
 
+@Service()
 export class Schema {
+  @Inject()
+  database!: DatabaseService
+
+  @Inject()
+  loader!: ReloationLoader
+
   private rawSchema?: GraphQLSchema
   private typeRegistry = new TypeRegistry()
   private resolverRegistry = new ResolverRegistry()
@@ -77,7 +87,7 @@ export class Schema {
     this.resolverRegistry.register(name, resolver)
   }
 
-  registerDirective(directive: DirectiveContract) {
+  registerDirective(directive: Directive) {
     this.directiveRegistry.register(directive)
   }
 
@@ -193,7 +203,6 @@ export class Schema {
         value = specifiedResolver(parentValue, null, inputArgs, null as any)
       }
       return directives.reduce((currentValue, directive) => {
-        console.log(directive)
         return directive({
           field,
           parent,
@@ -212,9 +221,7 @@ export class Schema {
       return []
     }
     return field.directives.map((directive) => {
-      const singletonDirective = this.directiveRegistry.get(
-        directive.name.value,
-      )
+      const initDirective = this.directiveRegistry.get(directive.name.value)
 
       // TODO:
       //    Here we can't guarantee this code works,
@@ -227,9 +234,7 @@ export class Schema {
         }
       }, {})
 
-      console.log(singletonDirective)
-
-      return singletonDirective(directiveArgs)
+      return initDirective({ args: directiveArgs })
     })
   }
 

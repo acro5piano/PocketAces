@@ -36,8 +36,6 @@ test('@create', async (t) => {
 
   t.truthy(inline?.data?.createUser)
 
-  return
-
   const create = await schema.executeGraphQL({
     query: gql`
       mutation CreateUser($name: String!) {
