@@ -1,5 +1,5 @@
 {
-  "name": "@pocket-ace/core",
+  "name": "@pocket-aces/core",
   "version": "0.0.4",
   "license": "MIT",
   "main": "build/index.js",

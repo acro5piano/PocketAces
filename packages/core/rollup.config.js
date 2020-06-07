@@ -17,7 +17,7 @@ export default {
     {
       file: 'build/index.js',
       format: 'cjs',
-      name: 'pocket-ace',
+      name: 'pocket-aces',
       sourcemap: true,
     },
     {
