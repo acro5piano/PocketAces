@@ -35,16 +35,18 @@ Define your app:
 
 const PocketAces = require('@pocket-aces/core')
 
-PocketAces.registerResolver('hello', () => 'world')
+const app = new PocketAces()
 
-PocketAces.configureDatabase({
+app.registerResolver('hello', () => 'world')
+
+app.configureDatabase({
   client: 'sqlite',
   connection: {
     filename: ':memory:',
   },
 })
 
-PocketAces.buildSchema(`
+app.buildSchema(`
   type Query {
     hello: String!
     users: [User!]! @all(table: "users")
@@ -60,7 +62,7 @@ PocketAces.buildSchema(`
   }
 `)
 
-PocketAces.initialize()
+app.initialize()
 
 const sql = `
   create table users (
@@ -69,8 +71,8 @@ const sql = `
   )
 `
 
-PocketAces.sql(sql).then(() => {
-  PocketAces.runApplication()
+app.sql(sql).then(() => {
+  app.runApplication()
 })
 ```
 
