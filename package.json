@@ -1,6 +1,6 @@
 {
   "name": "pocket-aces",
-  "version": "Apache 2.0",
+  "version": "Apache-2.0",
   "private": true,
   "repository": "git@github.com:acro5piano/PocketAces",
   "author": "gosho-kazuya <ketsume0211@gmail.com>",
