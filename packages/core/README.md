@@ -33,19 +33,17 @@ Define your app:
 ```javascript
 // app.js
 
-const PocketAces = require('@pocket-aces/core')
+const { PocketAces } = require('@pocket-aces/core')
 
 const app = new PocketAces()
 
 app.registerResolver('hello', () => 'world')
-
 app.configureDatabase({
   client: 'sqlite',
   connection: {
     filename: ':memory:',
   },
 })
-
 app.buildSchema(`
   type Query {
     hello: String!
@@ -61,7 +59,6 @@ app.buildSchema(`
     name: String!
   }
 `)
-
 app.initialize()
 
 const sql = `
