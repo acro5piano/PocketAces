@@ -1,13 +1,9 @@
-import { typeToTable } from 'src/database/Convension'
-import { Directive } from 'src/contracts/DirectiveContract'
+import { DirectiveProps } from 'src/contracts/DirectiveContract'
 
-const find: Directive<{ table?: string }, { id: string }> = ({ args }) => ({
-  resolveInfo,
+export default async function find({
   inputArgs,
   queryChain,
-}) => {
-  const table = typeToTable(args.table, resolveInfo.returnType)
-  return queryChain.table(table).where({ id: inputArgs.id }).first()
+  inferredTableName,
+}: DirectiveProps<{ table?: string }, { id: string }>) {
+  return queryChain.table(inferredTableName).where({ id: inputArgs.id }).first()
 }
-
-export default find

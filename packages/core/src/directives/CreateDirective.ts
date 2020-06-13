@@ -1,14 +1,11 @@
-import { Directive } from 'src/contracts/DirectiveContract'
-import { typeToTable } from 'src/database/Convension'
+import { DirectiveProps } from 'src/contracts/DirectiveContract'
 
-const create: Directive<{ table?: string }> = ({ args, db }) => async ({
-  resolveInfo,
+export default async function create({
+  db,
   inputArgs,
-}) => {
-  const table = typeToTable(args.table, resolveInfo.returnType)
-  const [id] = await db(table).insert(inputArgs).returning('id')
-  const record = await db(table).where({ id }).first()
+  inferredTableName,
+}: DirectiveProps<{ table?: string }>) {
+  const [id] = await db(inferredTableName).insert(inputArgs).returning('id')
+  const record = await db(inferredTableName).where({ id }).first()
   return record
 }
-
-export default create

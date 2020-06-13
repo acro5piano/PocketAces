@@ -7,7 +7,7 @@ function wash(str: string) {
 export function typeToTable(
   maybeTableName: string | undefined,
   fallback: string | { toString: () => string },
-) {
+): string {
   if (maybeTableName) {
     return maybeTableName
   }

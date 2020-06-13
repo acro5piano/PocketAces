@@ -1,4 +1,5 @@
 import { DatabaseService } from 'src/services/DatabaseService'
+import { typeToTable } from 'src/database/Convension'
 import { Service, Inject } from 'typedi'
 import { ReloationLoader } from 'src/database/ReloationLoader'
 import {
@@ -178,9 +179,13 @@ export class Schema {
     T extends object = object
   >(parent: ObjectTypeDefinitionNode, field: FieldDefinitionNode) {
     const specifiedResolver = this.resolverRegistry.getOrNull(field.name.value)
-    const directives = this.findDirectives(field)
+    const directiveWithArgs = this.findDirectivesWithArgs(field)
 
-    if (isRootNode(parent) && directives.length === 0 && !specifiedResolver) {
+    if (
+      isRootNode(parent) &&
+      directiveWithArgs.length === 0 &&
+      !specifiedResolver
+    ) {
       // Since we already know we are on the root type, this is either
       // query, mutation or subscription
       throw new Error(
@@ -188,7 +193,11 @@ export class Schema {
       )
     }
 
-    if (!isRootNode(parent) && directives.length === 0 && !specifiedResolver) {
+    if (
+      !isRootNode(parent) &&
+      directiveWithArgs.length === 0 &&
+      !specifiedResolver
+    ) {
       return defaultFieldResolver
     }
 
@@ -203,43 +212,52 @@ export class Schema {
         value = specifiedResolver(parentValue, null, inputArgs, null as any)
       }
 
-      return directives.reduce((currentValue, directive) => {
-        return directive({
-          field,
-          parent,
-          context,
-          inputArgs,
-          currentValue,
-          resolveInfo,
-          parentValue,
-          queryChain: currentValue || this.database.db,
-        })
-      }, value)
+      return directiveWithArgs.reduce(
+        (currentValue, { directive, directiveArgs }) => {
+          const inferredTableName = directiveArgs.table
+            ? typeToTable(directiveArgs.table, resolveInfo.returnType)
+            : ''
+          return directive({
+            args: directiveArgs,
+            db: this.database.db,
+            field,
+            parent,
+            context,
+            inputArgs,
+            inferredTableName,
+            currentValue,
+            resolveInfo,
+            parentValue,
+            queryChain: currentValue || this.database.db,
+          })
+        },
+        value,
+      )
     }
   }
 
-  private findDirectives(field: FieldDefinitionNode) {
+  private findDirectivesWithArgs(field: FieldDefinitionNode) {
     if (!field.directives) {
       return []
     }
-    return field.directives.map((directive) => {
-      const initDirective = this.directiveRegistry.get(directive.name.value)
+    return field.directives.map((directiveNode) => {
+      const directive = this.directiveRegistry.get(directiveNode.name.value)
 
       // TODO:
       //    Here we can't guarantee this code works,
       //    Maybe args handling should be done more proper way.
-      const directiveArgs = (directive.arguments || []).reduce((args, arg) => {
-        return {
-          ...args,
-          // @ts-ignore
-          [arg.name.value]: this.convertArgumentNodeToJs(arg),
-        }
-      }, {})
+      const directiveArgs = (directiveNode.arguments || []).reduce(
+        (args, arg) => {
+          return {
+            ...args,
+            // @ts-ignore
+            [arg.name.value]: this.convertArgumentNodeToJs(arg),
+          }
+        },
+        {},
+      ) as any
 
-      return initDirective({
-        args: directiveArgs,
-        db: this.database.db,
-      })
+      return { directive, directiveArgs }
     })
   }
 

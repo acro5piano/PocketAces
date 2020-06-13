@@ -6,23 +6,22 @@ import {
 import Knex from 'knex'
 
 export interface DirectiveExecutionArgs<
+  TArgs = any,
   TValue = any,
   TParent = any,
   TInput extends object = object,
   TContext extends object = object
 > {
+  args: TArgs
   currentValue: Knex.QueryBuilder | null | void | TValue
   parentValue: TParent
   resolveInfo: GraphQLResolveInfo
   field: FieldDefinitionNode
   parent: ObjectTypeDefinitionNode
   inputArgs: TInput
+  inferredTableName: string
   context: TContext
   queryChain: Knex.QueryBuilder
-}
-
-export interface DirectiveInit<TArgs extends object> {
-  args: TArgs
   db: Knex
 }
 
@@ -34,7 +33,13 @@ export type Directive<
   TNext = null,
   TContext extends object = object
 > = (
-  initArgs: DirectiveInit<TInitArgs>,
-) => (
-  executionArgs: DirectiveExecutionArgs<TValue, TParent, TInput, TContext>,
+  args: DirectiveProps<TInitArgs, TInput, TValue, TParent, TContext>,
 ) => TNext | Promise<void | null | TNext>
+
+export type DirectiveProps<
+  TInitArgs extends object = any,
+  TInput extends object = any,
+  TValue extends object = any,
+  TParent extends object = any,
+  TContext extends object = any
+> = DirectiveExecutionArgs<TInitArgs, TValue, TParent, TInput, TContext>
