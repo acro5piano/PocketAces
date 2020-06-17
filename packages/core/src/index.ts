@@ -4,7 +4,6 @@ import { HttpService } from 'src/services/HttpService'
 import { GraphQLService } from 'src/services/GraphQLService'
 import { ConfigService } from 'src/services/ConfigService'
 import { DatabaseService } from 'src/services/DatabaseService'
-export { BaseDirective } from 'src/directives/BaseDirective'
 import { showBoxMessage } from 'src/utils'
 
 export const registerDirective = Container.get(GraphQLService).registerDirective

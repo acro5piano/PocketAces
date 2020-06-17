@@ -1,16 +1,12 @@
 const PocketAce = require('./build')
 
-class MyDirective extends PocketAce.BaseDirective {
-  name = 'myDirective'
-
-  resolveField({ currentValue }) {
-    console.log('Hello')
-    return currentValue
-  }
+function myDirective({ currentValue }) {
+  console.log('Hello')
+  return currentValue
 }
 
 PocketAce.registerResolver('hello', () => 'world')
-PocketAce.registerDirective(new MyDirective())
+PocketAce.registerDirective(myDirective)
 
 PocketAce.configureDatabase({
   client: 'sqlite',
