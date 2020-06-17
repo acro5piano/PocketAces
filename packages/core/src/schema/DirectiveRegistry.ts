@@ -1,7 +1,7 @@
 import { Directive } from 'src/contracts/DirectiveContract'
 
 import AllDirective from 'src/directives/AllDirective'
-import { AuthDirective } from 'src/directives/AuthDirective'
+import AuthDirective from 'src/directives/AuthDirective'
 import { CanDirective } from 'src/directives/CanDirective'
 import CreateDirective from 'src/directives/CreateDirective'
 import { HasManyDirective } from 'src/directives/HasManyDirective'

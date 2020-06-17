@@ -1,15 +1,14 @@
-import { BaseDirective } from './BaseDirective'
-import { DirectiveExecutionArgs } from 'src/contracts/DirectiveContract'
-import { typeToTable } from 'src/database/Convension'
+import { GraphQLError } from 'graphql'
+import { DirectiveProps } from 'src/contracts/DirectiveContract'
 
-export class AuthDirective extends BaseDirective<{ table?: string }> {
-  name = 'auth'
-
-  resolveField({ resolveInfo }: DirectiveExecutionArgs) {
-    const table = typeToTable(
-      this.getDirectiveArgValue('table'),
-      resolveInfo.returnType,
-    )
-    return this.db.table(table).where('id', this.getCurrentUser().uid).first()
+export default async function auth({
+  inferredTableName,
+  db,
+  context,
+}: DirectiveProps<{ table?: string }>) {
+  if (!context.user || !context.user.uid) {
+    // TODO: make this message flexible
+    throw new GraphQLError('not_authorized')
   }
+  return db.table(inferredTableName).where('id', context.user.uid).first()
 }

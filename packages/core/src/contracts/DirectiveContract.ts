@@ -4,6 +4,7 @@ import {
   GraphQLResolveInfo,
 } from 'graphql'
 import Knex from 'knex'
+import { AuthContext } from 'src/auth/AuthContext'
 
 export interface DirectiveExecutionArgs<
   TArgs = any,
@@ -41,5 +42,5 @@ export type DirectiveProps<
   TInput extends object = any,
   TValue extends object = any,
   TParent extends object = any,
-  TContext extends object = any
+  TContext extends object = AuthContext
 > = DirectiveExecutionArgs<TInitArgs, TValue, TParent, TInput, TContext>

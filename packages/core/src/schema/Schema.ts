@@ -214,9 +214,11 @@ export class Schema {
 
       return directiveWithArgs.reduce(
         (currentValue, { directive, directiveArgs }) => {
-          const inferredTableName = directiveArgs.table
-            ? typeToTable(directiveArgs.table, resolveInfo.returnType)
-            : ''
+          // TODO: make `table` flexible
+          const inferredTableName = typeToTable(
+            directiveArgs.table,
+            resolveInfo.returnType,
+          )
           return directive({
             args: directiveArgs,
             db: this.database.db,

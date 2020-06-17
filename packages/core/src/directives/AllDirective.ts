@@ -1,11 +1,8 @@
-import { Directive } from 'src/contracts/DirectiveContract'
-import { typeToTable } from 'src/database/Convension'
+import { DirectiveProps } from 'src/contracts/DirectiveContract'
 
-const all: Directive<{ table?: string }> = ({ args, db }) => ({
-  resolveInfo,
-}) => {
-  const table = typeToTable(args.table, resolveInfo.returnType)
-  return db.table(table)
+export default async function all({
+  inferredTableName,
+  db,
+}: DirectiveProps<{ table?: string }>) {
+  return db.table(inferredTableName)
 }
-
-export default all
