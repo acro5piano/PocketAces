@@ -1,27 +1,16 @@
-import { BaseDirective } from './BaseDirective'
-import { DirectiveExecutionArgs } from 'src/contracts/DirectiveContract'
-import { typeToTable, joinKeyFromTable } from 'src/database/Convension'
+import { joinKeyFromTable } from 'src/database/Convension'
+import { DirectiveProps } from 'src/contracts/DirectiveContract'
 
-export class HasManyDirective extends BaseDirective<{
-  table?: string
-  joins: string
-}> {
-  name = 'hasMany'
+// TODO: currently happening N+1 problem!
+export default function hasMany({
+  inferredTableName,
+  parentValue,
+  args: { joins },
+  loader,
+  parent,
+}: DirectiveProps<{ table?: string; joins?: string }>) {
+  const joinKey = joins || joinKeyFromTable(parent.name.value)
 
-  async resolveField({
-    parentValue,
-    resolveInfo,
-  }: DirectiveExecutionArgs<any, { id: string }>) {
-    const table = typeToTable(
-      this.getDirectiveArgValue('table'),
-      resolveInfo.returnType,
-    )
-
-    const joinKey =
-      this.getDirectiveArgValue('joins') ||
-      joinKeyFromTable(this.getParentTypeName())
-
-    const rows = this.loader.getLoader(table, joinKey).load(parentValue.id)
-    return rows
-  }
+  const rows = loader.getLoader(inferredTableName, joinKey).load(parentValue.id)
+  return rows
 }

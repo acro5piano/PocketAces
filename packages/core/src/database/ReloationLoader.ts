@@ -14,22 +14,23 @@ export class ReloationLoader {
   }
 
   getLoader(tableName: string, key: string) {
-    const loader = this.loaders.get(`${tableName}__${key}`)
-    if (!loader) {
-      const loader = new DataLoader(
-        (ids: readonly string[]) => {
-          return this.database.db
-            .table<{ [k in typeof key]: string }>(tableName)
-            .whereIn(key, ids)
-            .select()
-            .then((rows) => ids.map((id) => rows.filter((x) => x[key] === id)))
-        },
-        { cache: false },
-      )
-
-      this.loaders.set(tableName, loader)
-      return loader
+    const savedLoader = this.loaders.get(`${tableName}__${key}`)
+    if (savedLoader) {
+      return savedLoader
     }
+
+    const loader = new DataLoader(
+      (ids: readonly string[]) => {
+        return this.database.db
+          .table<{ [k in typeof key]: string }>(tableName)
+          .whereIn(key, ids)
+          .select()
+          .then((rows) => ids.map((id) => rows.filter((x) => x[key] === id)))
+      },
+      { cache: false },
+    )
+
+    this.loaders.set(tableName, loader)
     return loader
   }
 }

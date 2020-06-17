@@ -1,3 +1,7 @@
+import { DatabaseService } from 'src/services/DatabaseService'
+import { typeToTable } from 'src/database/Convension'
+import { Service, Inject } from 'typedi'
+import { ReloationLoader } from 'src/database/ReloationLoader'
 import {
   parse,
   graphql,
@@ -27,7 +31,7 @@ import { TypeRegistry } from './TypeRegistry'
 import { Resolver, ResolverRegistry } from './ResolverRegistry'
 import { DirectiveRegistry } from './DirectiveRegistry'
 import { debug } from 'src/utils'
-import { DirectiveContract } from 'src/contracts/DirectiveContract'
+import { Directive } from 'src/contracts/DirectiveContract'
 import { PrimitiveTypeArray } from 'src/utils'
 import { AuthContext } from 'src/auth/AuthContext'
 import { Request } from 'koa'
@@ -45,7 +49,14 @@ interface GraphQLExecutionArgs<V, C> {
   context?: C
 }
 
+@Service()
 export class Schema {
+  @Inject()
+  database!: DatabaseService
+
+  @Inject()
+  loader!: ReloationLoader
+
   private rawSchema?: GraphQLSchema
   private typeRegistry = new TypeRegistry()
   private resolverRegistry = new ResolverRegistry()
@@ -77,7 +88,7 @@ export class Schema {
     this.resolverRegistry.register(name, resolver)
   }
 
-  registerDirective(directive: DirectiveContract) {
+  registerDirective(directive: Directive) {
     this.directiveRegistry.register(directive)
   }
 
@@ -168,9 +179,13 @@ export class Schema {
     T extends object = object
   >(parent: ObjectTypeDefinitionNode, field: FieldDefinitionNode) {
     const specifiedResolver = this.resolverRegistry.getOrNull(field.name.value)
-    const directives = this.findDirectives(field)
+    const directiveWithArgs = this.findDirectivesWithArgs(field)
 
-    if (isRootNode(parent) && directives.length === 0 && !specifiedResolver) {
+    if (
+      isRootNode(parent) &&
+      directiveWithArgs.length === 0 &&
+      !specifiedResolver
+    ) {
       // Since we already know we are on the root type, this is either
       // query, mutation or subscription
       throw new Error(
@@ -178,7 +193,11 @@ export class Schema {
       )
     }
 
-    if (!isRootNode(parent) && directives.length === 0 && !specifiedResolver) {
+    if (
+      !isRootNode(parent) &&
+      directiveWithArgs.length === 0 &&
+      !specifiedResolver
+    ) {
       return defaultFieldResolver
     }
 
@@ -192,46 +211,56 @@ export class Schema {
       if (specifiedResolver) {
         value = specifiedResolver(parentValue, null, inputArgs, null as any)
       }
-      return directives.reduce((currentValue, directive) => {
-        return directive
-          .setParameters({
+
+      return directiveWithArgs.reduce(
+        (currentValue, { directive, directiveArgs }) => {
+          // TODO: make `table` flexible
+          const inferredTableName = typeToTable(
+            directiveArgs.table,
+            resolveInfo.returnType,
+          )
+          return directive({
+            args: directiveArgs,
+            db: this.database.db,
+            loader: this.loader,
             field,
             parent,
             context,
             inputArgs,
-          })
-          .resolveField({
+            inferredTableName,
             currentValue,
             resolveInfo,
             parentValue,
+            queryChain: currentValue || this.database.db,
           })
-      }, value)
+        },
+        value,
+      )
     }
   }
 
-  private findDirectives(field: FieldDefinitionNode) {
+  private findDirectivesWithArgs(field: FieldDefinitionNode) {
     if (!field.directives) {
       return []
     }
-    return field.directives.map((directive) => {
-      const singletonDirective = this.directiveRegistry.get(
-        directive.name.value,
-      )
+    return field.directives.map((directiveNode) => {
+      const directive = this.directiveRegistry.get(directiveNode.name.value)
 
       // TODO:
       //    Here we can't guarantee this code works,
       //    Maybe args handling should be done more proper way.
-      const directiveArgs = (directive.arguments || []).reduce((args, arg) => {
-        return {
-          ...args,
-          // @ts-ignore
-          [arg.name.value]: this.convertArgumentNodeToJs(arg),
-        }
-      }, {})
+      const directiveArgs = (directiveNode.arguments || []).reduce(
+        (args, arg) => {
+          return {
+            ...args,
+            // @ts-ignore
+            [arg.name.value]: this.convertArgumentNodeToJs(arg),
+          }
+        },
+        {},
+      ) as any
 
-      return singletonDirective.forge({
-        directiveArgs,
-      })
+      return { directive, directiveArgs }
     })
   }
 

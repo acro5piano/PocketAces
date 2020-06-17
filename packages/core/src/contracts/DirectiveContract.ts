@@ -4,50 +4,45 @@ import {
   GraphQLResolveInfo,
 } from 'graphql'
 import Knex from 'knex'
+import { AuthContext } from 'src/auth/AuthContext'
+import { ReloationLoader } from 'src/database/ReloationLoader'
 
-export interface DirectiveExecutionArgs<TValue = any, TParent = any> {
-  currentValue: TValue
-  parentValue: TParent
-  resolveInfo: GraphQLResolveInfo
-}
-
-export interface DirectiveExecutionChainable<TParent = any> {
-  currentValue: Knex.QueryBuilder | null
-  parentValue: TParent
-  resolveInfo: GraphQLResolveInfo
-}
-
-export interface DirectiveParameters<
-  TArgs extends object,
-  TInput extends object,
-  TContext extends object
-> {
-  field: FieldDefinitionNode
-  parent: ObjectTypeDefinitionNode
-  directiveArgs: TArgs
-  inputArgs: TInput
-  context: TContext
-}
-
-// Should we implement this pattern?
-// https://github.com/nuwave/lighthouse/blob/master/src/Schema/Values/FieldValue.php
-// https://github.com/nuwave/lighthouse/issues/244
-export interface DirectiveContract<
-  TArgs extends object = object,
+export interface DirectiveExecutionArgs<
+  TArgs = any,
+  TValue = any,
+  TParent = any,
   TInput extends object = object,
-  TValue = null,
-  TParent extends object = object,
-  TNext = any,
   TContext extends object = object
 > {
-  name: string
-  resolveField(
-    args: DirectiveExecutionArgs<TValue, TParent>,
-  ): TNext | Promise<TNext> | void | Promise<void>
-  forge(
-    ctx: Partial<DirectiveParameters<TArgs, TInput, TContext>>,
-  ): DirectiveContract<TArgs, TInput, TValue, TParent, TNext>
-  setParameters(
-    ctx: Partial<DirectiveParameters<TArgs, TInput, TContext>>,
-  ): DirectiveContract<TArgs, TInput, TValue, TParent, TNext>
+  args: TArgs
+  currentValue: Knex.QueryBuilder | null | void | TValue
+  parentValue: TParent
+  resolveInfo: GraphQLResolveInfo
+  field: FieldDefinitionNode
+  parent: ObjectTypeDefinitionNode
+  inputArgs: TInput
+  inferredTableName: string
+  context: TContext
+  queryChain: Knex.QueryBuilder
+  db: Knex
+  loader: ReloationLoader
 }
+
+export type Directive<
+  TDirectiveArgs extends object = object,
+  TInput extends object = object,
+  TValue extends object = object,
+  TParent extends object = object,
+  TNext = null,
+  TContext extends object = object
+> = (
+  args: DirectiveProps<TDirectiveArgs, TInput, TValue, TParent, TContext>,
+) => TNext | Promise<void | null | TNext>
+
+export type DirectiveProps<
+  TDirectiveArgs extends object = any,
+  TInput extends object = any,
+  TValue extends object = any,
+  TParent extends object = any,
+  TContext extends object = AuthContext
+> = DirectiveExecutionArgs<TDirectiveArgs, TValue, TParent, TInput, TContext>

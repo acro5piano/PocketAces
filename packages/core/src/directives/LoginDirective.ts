@@ -1,47 +1,41 @@
-import { BaseDirective } from './BaseDirective'
-import { DirectiveExecutionArgs } from 'src/contracts/DirectiveContract'
-import { typeToTable } from 'src/database/Convension'
 import * as Auth from 'src/auth/Auth'
 
-export class LoginDirective extends BaseDirective<
-  {
-    table: string
-    role?: string
-    identity: string
-    hashedColumn: string
-    password: string
-  },
-  any
-> {
-  name = 'login'
+import { DirectiveProps } from 'src/contracts/DirectiveContract'
 
-  async resolveField({ resolveInfo }: DirectiveExecutionArgs) {
-    const table = typeToTable(
-      this.getDirectiveArgValue('table'),
-      resolveInfo.returnType,
-    )
-    const invalidMessage = 'User not found, or password is invalid.'
-    const idColumn = this.getDirectiveArgValue('identity') || 'email'
-    const passwordColumn =
-      this.getDirectiveArgValue('hashedColumn') || 'passwordHash'
-    const user = await this.db
-      .table(table)
-      .where(idColumn, this.getInputArgValue(idColumn))
-      .first()
-    if (!user) {
-      throw new Error(invalidMessage)
-    }
+interface DirectiveArgs {
+  table: string
+  identity: string
+  hashedColumn: string
+  password: string
+  role?: string
+}
 
-    const passwordInput = this.getInputArgValue('password')
-    if (!(await Auth.check(passwordInput, user[passwordColumn]))) {
-      throw new Error(invalidMessage)
-    }
-
-    const { token, refreshToken } = await Auth.createTokens(
-      user.id,
-      this.getDirectiveArgValue('role') || null,
-    )
-
-    return { token, refreshToken }
+export default async function login({
+  inputArgs,
+  db,
+  inferredTableName,
+  args,
+}: DirectiveProps<DirectiveArgs>) {
+  const invalidMessage = 'User not found, or password is invalid.'
+  const idColumn = args.identity || 'email'
+  const passwordColumn = args.hashedColumn || 'passwordHash'
+  const user = await db
+    .table(inferredTableName)
+    .where(idColumn, inputArgs[idColumn])
+    .first()
+  if (!user) {
+    throw new Error(invalidMessage)
   }
+
+  const passwordInput = inputArgs.password
+  if (!(await Auth.check(passwordInput, user[passwordColumn]))) {
+    throw new Error(invalidMessage)
+  }
+
+  const { token, refreshToken } = await Auth.createTokens(
+    user.id,
+    args.role || null,
+  )
+
+  return { token, refreshToken }
 }

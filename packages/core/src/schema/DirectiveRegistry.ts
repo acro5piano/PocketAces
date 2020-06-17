@@ -1,42 +1,42 @@
-import { Container } from 'typedi'
-import { DirectiveContract } from 'src/contracts/DirectiveContract'
+import { Directive } from 'src/contracts/DirectiveContract'
 
-import { AllDirective } from 'src/directives/AllDirective'
-import { AuthDirective } from 'src/directives/AuthDirective'
-import { CanDirective } from 'src/directives/CanDirective'
-import { CreateDirective } from 'src/directives/CreateDirective'
-import { HasManyDirective } from 'src/directives/HasManyDirective'
-import { FindDirective } from 'src/directives/FindDirective'
-import { LogDirective } from 'src/directives/LogDirective'
-import { LoginDirective } from 'src/directives/LoginDirective'
-import { ScopeDirective } from 'src/directives/ScopeDirective'
-import { UpdateDirective } from 'src/directives/UpdateDirective'
-import { WhereDirective } from 'src/directives/WhereDirective'
+import AllDirective from 'src/directives/AllDirective'
+import AuthDirective from 'src/directives/AuthDirective'
+import CanDirective from 'src/directives/CanDirective'
+import CreateDirective from 'src/directives/CreateDirective'
+import HasManyDirective from 'src/directives/HasManyDirective'
+import FindDirective from 'src/directives/FindDirective'
+import LogDirective from 'src/directives/LogDirective'
+import LoginDirective from 'src/directives/LoginDirective'
+import ScopeDirective from 'src/directives/ScopeDirective'
+import UpdateDirective from 'src/directives/UpdateDirective'
+import WhereDirective from 'src/directives/WhereDirective'
+
+const builtinDirectives = [
+  AllDirective,
+  AuthDirective,
+  CanDirective,
+  CreateDirective,
+  HasManyDirective,
+  FindDirective,
+  LogDirective,
+  LoginDirective,
+  ScopeDirective,
+  UpdateDirective,
+  WhereDirective,
+]
 
 export class DirectiveRegistry {
-  private directives = new Map<string, DirectiveContract>()
+  private directives = new Map<string, Directive>()
 
   constructor() {
-    const builtinDirectives = [
-      AllDirective,
-      AuthDirective,
-      CanDirective,
-      CreateDirective,
-      HasManyDirective,
-      FindDirective,
-      LogDirective,
-      LoginDirective,
-      ScopeDirective,
-      UpdateDirective,
-      WhereDirective,
-    ]
     builtinDirectives.forEach((directive) => {
       // @ts-ignore
-      this.register(Container.get(directive))
+      this.register(directive)
     })
   }
 
-  register(directive: DirectiveContract) {
+  register(directive: Directive) {
     this.directives.set(directive.name, directive)
   }
 

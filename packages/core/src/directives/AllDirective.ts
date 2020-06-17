@@ -1,15 +1,8 @@
-import { BaseDirective } from './BaseDirective'
-import { DirectiveExecutionArgs } from 'src/contracts/DirectiveContract'
-import { typeToTable } from 'src/database/Convension'
+import { DirectiveProps } from 'src/contracts/DirectiveContract'
 
-export class AllDirective extends BaseDirective<{ table?: string }> {
-  name = 'all'
-
-  resolveField({ resolveInfo }: DirectiveExecutionArgs) {
-    const table = typeToTable(
-      this.getDirectiveArgValue('table'),
-      resolveInfo.returnType,
-    )
-    return this.db.table(table)
-  }
+export default async function all({
+  inferredTableName,
+  db,
+}: DirectiveProps<{ table?: string }>) {
+  return db.table(inferredTableName)
 }

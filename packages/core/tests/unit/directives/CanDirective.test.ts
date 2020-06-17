@@ -1,4 +1,5 @@
 import 'tests/bootstrapServices'
+import { Container } from 'typedi'
 import { test, gql, createTestDB } from 'tests/helper'
 import { Schema } from 'src/schema/Schema'
 
@@ -9,8 +10,8 @@ test.beforeEach(async (t) => {
   await t.context.db('users').insert({ name: 'Nick' })
 })
 
-test('@can - success', async (t) => {
-  const schema = new Schema()
+test.only('@can - success', async (t) => {
+  const schema = Container.get(Schema)
 
   const [user] = await t.context.db('users').where({ name: 'Kazuya' })
 
@@ -77,7 +78,7 @@ test('@can - success', async (t) => {
 })
 
 test('@can - failed', async (t) => {
-  const schema = new Schema()
+  const schema = Container.get(Schema)
 
   const [kazuya] = await t.context.db('users').where({ name: 'Kazuya' })
   const [nickId] = await t.context

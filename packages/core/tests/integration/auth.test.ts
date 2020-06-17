@@ -34,7 +34,7 @@ test('graphql#auth', async (t) => {
     `,
   })
   t.is(undefined, denied.data?.currentUser?.id)
-  t.is('Not Authorized.', denied.errors?.[0]?.message)
+  t.is('not_authorized', denied.errors?.[0]?.message)
 
   const accepted = await t.context.graphql({
     query: gql`
