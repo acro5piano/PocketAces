@@ -1,6 +1,7 @@
 import 'tests/bootstrapServices'
 import { test, gql, createTestDB } from 'tests/helper'
 import { Schema } from 'src/schema/Schema'
+import { Container } from 'typedi'
 import { getUserFromToken } from 'src/auth/Auth'
 
 test.beforeEach(async (t) => {
@@ -16,7 +17,7 @@ test.beforeEach(async (t) => {
 })
 
 test('@login - success', async (t) => {
-  const schema = new Schema()
+  const schema = Container.get(Schema)
 
   const user = await t.context.db('users').first()
 
@@ -73,7 +74,7 @@ test('@login - success', async (t) => {
 })
 
 test('@login - failed', async (t) => {
-  const schema = new Schema()
+  const schema = Container.get(Schema)
 
   schema.buildSchema(gql`
     type Mutation {

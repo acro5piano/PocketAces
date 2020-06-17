@@ -1,13 +1,10 @@
-import { typeToTable } from 'src/database/Convension'
 import { omit } from 'src/utils'
-import { Directive } from 'src/contracts/DirectiveContract'
+import { DirectiveProps } from 'src/contracts/DirectiveContract'
 
-const scope: Directive<{ table?: string }> = ({ args }) => ({
-  resolveInfo,
+export default function scope({
   queryChain,
-}) => {
-  const table = typeToTable(args.table, resolveInfo.returnType)
-  return queryChain.table(table).where(omit(args, 'table'))
+  inferredTableName,
+  args,
+}: DirectiveProps<{ table?: string }>) {
+  return queryChain.table(inferredTableName).where(omit(args, 'table'))
 }
-
-export default scope

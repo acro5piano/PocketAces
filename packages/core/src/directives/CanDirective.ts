@@ -1,6 +1,6 @@
 import { DirectiveProps } from 'src/contracts/DirectiveContract'
 
-export default async function can({
+export default function can({
   currentValue,
   args: { eq, roles },
   queryChain,

@@ -1,23 +1,16 @@
-import { BaseDirective } from './BaseDirective'
 import { pick } from 'src/utils'
-import { DirectiveExecutionArgs } from 'src/contracts/DirectiveContract'
+import { DirectiveProps } from 'src/contracts/DirectiveContract'
 
-export class UpdateDirective extends BaseDirective<
-  {
-    table?: string
-    keys?: string
-  },
-  any
-> {
-  name = 'update'
+export default async function update({
+  inputArgs,
+  queryChain,
+  args: { keys },
+}: DirectiveProps<{ table?: string; keys: string[] }, { id: string }>) {
+  const _keys = keys || []
 
-  async resolveField({ currentValue }: DirectiveExecutionArgs) {
-    const keys = this.getDirectiveArgValue('keys') || ([] as string[])
+  console.log({ queryChain })
 
-    await this.queryChain(currentValue)
-      .clone()
-      .update(pick(this.getInputArgs() as any, ...keys))
+  await queryChain.clone().update(pick(inputArgs as any, ..._keys))
 
-    return this.queryChain(currentValue)
-  }
+  return queryChain
 }

@@ -1,7 +1,7 @@
 import { test, gql, normGql } from 'tests/helper'
+import { Container } from 'typedi'
 import { Schema } from 'src/schema/Schema'
 import { DatabaseService } from 'src/services/DatabaseService'
-import { Container } from 'typedi'
 
 const mockUsers = [
   {
@@ -25,9 +25,9 @@ const mockedDatabaseService = {
   },
 }
 
-test('schema#executeGraphQL', async t => {
+test('schema#executeGraphQL', async (t) => {
   Container.set(DatabaseService, mockedDatabaseService)
-  const schema = new Schema()
+  const schema = Container.get(Schema)
 
   schema.registerResolver('health', () => 'ok')
   schema.registerResolver('mockUsers', () => mockUsers)

@@ -1,17 +1,14 @@
-import { typeToTable } from 'src/database/Convension'
 import { pick } from 'src/utils'
-import { Directive } from 'src/contracts/DirectiveContract'
+import { DirectiveProps } from 'src/contracts/DirectiveContract'
 
-const where: Directive<{ table: string; keys?: string[] }> = ({ args }) => ({
-  resolveInfo,
+export default async function where({
   inputArgs,
   queryChain,
-}) => {
-  const table = typeToTable(args.table, resolveInfo.returnType)
+  inferredTableName,
+  args,
+}: DirectiveProps<{ table?: string; keys?: string[] }>) {
   const keys = args.keys || ([] as string[])
   const where = keys.length === 0 ? inputArgs : pick(inputArgs as any, ...keys)
 
-  return queryChain.table(table).where(where)
+  return queryChain.table(inferredTableName).where(where)
 }
-
-export default where

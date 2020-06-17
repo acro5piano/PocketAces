@@ -1,16 +1,17 @@
 import 'tests/bootstrapServices'
+import { Container } from 'typedi'
 import { test, gql, createTestDB } from 'tests/helper'
 import { Schema } from 'src/schema/Schema'
 
-test.beforeEach(async t => {
+test.beforeEach(async (t) => {
   await createTestDB()
   await t.context.db('users').insert({ name: 'Kazuya', isActive: false })
   await t.context.db('users').insert({ name: 'Yuta', isActive: false })
   await t.context.db('users').insert({ name: 'Ayana', isActive: true })
 })
 
-test('@scope', async t => {
-  const schema = new Schema()
+test('@scope', async (t) => {
+  const schema = Container.get(Schema)
 
   schema.buildSchema(gql`
     type Query {

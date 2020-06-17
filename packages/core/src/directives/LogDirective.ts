@@ -1,10 +1,10 @@
-import { BaseDirective } from './BaseDirective'
+import { DirectiveProps } from 'src/contracts/DirectiveContract'
 
-export class LogDirective extends BaseDirective {
-  name = 'log'
+export default async function log({
+  currentValue,
+  args: { message },
+}: DirectiveProps<{ message?: string }>) {
+  console.log(message || 'Hello!')
 
-  resolveField({ currentValue }: any) {
-    console.log('AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA')
-    return currentValue
-  }
+  return currentValue
 }

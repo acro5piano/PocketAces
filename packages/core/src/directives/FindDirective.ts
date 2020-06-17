@@ -1,6 +1,6 @@
 import { DirectiveProps } from 'src/contracts/DirectiveContract'
 
-export default async function find({
+export default function find({
   inputArgs,
   queryChain,
   inferredTableName,
