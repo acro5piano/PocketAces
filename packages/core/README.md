@@ -1,8 +1,8 @@
-![test](https://github.com/acro5piano/PocketAce/workflows/test/badge.svg)
-[![npm version](https://badge.fury.io/js/%40pocket-ace%2Fcore.svg)](https://badge.fury.io/js/%40pocket-ace%2Fcore)
-[![codecov](https://codecov.io/gh/acro5piano/PocketAce/branch/master/graph/badge.svg)](https://codecov.io/gh/acro5piano/PocketAce)
+![test](https://github.com/acro5piano/PocketAces/workflows/test/badge.svg)
+[![npm version](https://badge.fury.io/js/%40pocket-aces%2Fcore.svg)](https://badge.fury.io/js/%40pocket-aces%2Fcore)
+[![codecov](https://codecov.io/gh/acro5piano/PocketAces/branch/master/graph/badge.svg)](https://codecov.io/gh/acro5piano/PocketAces)
 
-# PocketAce
+# PocketAces
 
 An Experimental GrpahQL framework
 
@@ -25,7 +25,7 @@ The following features **will** be implemented:
 Install:
 
 ```
-yarn add @pocket-ace/core graphql sqlite3
+yarn add @pocket-aces/core graphql sqlite3
 ```
 
 Define your app:
@@ -33,18 +33,18 @@ Define your app:
 ```javascript
 // app.js
 
-const PocketAce = require('@pocket-ace/core')
+const { PocketAces } = require('@pocket-aces/core')
 
-PocketAce.registerResolver('hello', () => 'world')
+const app = new PocketAces()
 
-PocketAce.configureDatabase({
+app.registerResolver('hello', () => 'world')
+app.configureDatabase({
   client: 'sqlite',
   connection: {
     filename: ':memory:',
   },
 })
-
-PocketAce.buildSchema(`
+app.buildSchema(`
   type Query {
     hello: String!
     users: [User!]! @all(table: "users")
@@ -59,8 +59,7 @@ PocketAce.buildSchema(`
     name: String!
   }
 `)
-
-PocketAce.initialize()
+app.initialize()
 
 const sql = `
   create table users (
@@ -69,8 +68,8 @@ const sql = `
   )
 `
 
-PocketAce.sql(sql).then(() => {
-  PocketAce.runApplication()
+app.sql(sql).then(() => {
+  app.runApplication()
 })
 ```
 

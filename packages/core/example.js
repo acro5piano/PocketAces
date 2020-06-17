@@ -1,14 +1,16 @@
-const PocketAce = require('./build')
+const { PocketAces, BaseDirective } = require('./build')
+
+const app = new PocketAces()
 
 function myDirective({ currentValue }) {
-  console.log('Hello')
+  console.log('Hello! You created your first directive :)')
   return currentValue
 }
 
-PocketAce.registerResolver('hello', () => 'world')
-PocketAce.registerDirective(myDirective)
+app.registerResolver('hello', () => 'world')
+app.registerDirective(myDirective)
 
-PocketAce.configureDatabase({
+app.configureDatabase({
   client: 'sqlite',
   connection: {
     filename: ':memory:',
@@ -16,7 +18,7 @@ PocketAce.configureDatabase({
   useNullAsDefault: true,
 })
 
-PocketAce.buildSchema(`
+app.buildSchema(`
   type Query {
     hello: String! @myDirective
     users: [User!]! @all(table: "users")
@@ -32,7 +34,7 @@ PocketAce.buildSchema(`
   }
 `)
 
-PocketAce.initialize()
+app.initialize()
 
 const sql = `
   create table users (
@@ -41,6 +43,6 @@ const sql = `
   )
 `
 
-PocketAce.sql(sql).then(() => {
-  PocketAce.runApplication()
+app.sql(sql).then(() => {
+  app.runApplication()
 })
