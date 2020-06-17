@@ -1,4 +1,4 @@
-const { PocketAces, BaseDirective } = require('./build')
+const { PocketAces } = require('./build')
 
 const app = new PocketAces()
 
