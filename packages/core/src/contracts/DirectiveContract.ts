@@ -5,6 +5,7 @@ import {
 } from 'graphql'
 import Knex from 'knex'
 import { AuthContext } from 'src/auth/AuthContext'
+import { ReloationLoader } from 'src/database/ReloationLoader'
 
 export interface DirectiveExecutionArgs<
   TArgs = any,
@@ -24,23 +25,24 @@ export interface DirectiveExecutionArgs<
   context: TContext
   queryChain: Knex.QueryBuilder
   db: Knex
+  loader: ReloationLoader
 }
 
 export type Directive<
-  TInitArgs extends object = object,
+  TDirectiveArgs extends object = object,
   TInput extends object = object,
   TValue extends object = object,
   TParent extends object = object,
   TNext = null,
   TContext extends object = object
 > = (
-  args: DirectiveProps<TInitArgs, TInput, TValue, TParent, TContext>,
+  args: DirectiveProps<TDirectiveArgs, TInput, TValue, TParent, TContext>,
 ) => TNext | Promise<void | null | TNext>
 
 export type DirectiveProps<
-  TInitArgs extends object = any,
+  TDirectiveArgs extends object = any,
   TInput extends object = any,
   TValue extends object = any,
   TParent extends object = any,
   TContext extends object = AuthContext
-> = DirectiveExecutionArgs<TInitArgs, TValue, TParent, TInput, TContext>
+> = DirectiveExecutionArgs<TDirectiveArgs, TValue, TParent, TInput, TContext>

@@ -7,5 +7,5 @@ export interface JwtPayload {
 }
 
 export interface AuthContext {
-  user?: JwtPayload
+  user: JwtPayload
 }

@@ -1,8 +1,9 @@
 import 'tests/bootstrapServices'
+import { Container } from 'typedi'
 import { test, gql, createTestDB } from 'tests/helper'
 import { Schema } from 'src/schema/Schema'
 
-test.beforeEach(async t => {
+test.beforeEach(async (t) => {
   await createTestDB()
 
   const [userId] = await t.context
@@ -19,8 +20,8 @@ test.beforeEach(async t => {
   await t.context.db('users').insert({ name: 'John' }).returning('id')
 })
 
-test('@hasMany with directiveArgs', async t => {
-  const schema = new Schema()
+test('@hasMany with directiveArgs', async (t) => {
+  const schema = Container.get(Schema)
   const [{ id }] = await t.context.db('users').where({ name: 'Kazuya' })
 
   schema.buildSchema(gql`
@@ -59,8 +60,8 @@ test('@hasMany with directiveArgs', async t => {
   t.is(0, get.data?.users?.[1]?.posts.length)
 })
 
-test('@hasMany without directiveArgs', async t => {
-  const schema = new Schema()
+test('@hasMany without directiveArgs', async (t) => {
+  const schema = Container.get(Schema)
   const [{ id }] = await t.context.db('users').where({ name: 'Kazuya' })
 
   schema.buildSchema(gql`

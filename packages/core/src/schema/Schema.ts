@@ -222,6 +222,7 @@ export class Schema {
           return directive({
             args: directiveArgs,
             db: this.database.db,
+            loader: this.loader,
             field,
             parent,
             context,
