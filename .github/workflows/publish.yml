@@ -1,7 +1,9 @@
-name: test
-on: push
+name: publish
+on:
+  release:
+    types: [published]
 jobs:
-  test-node-api:
+  publish-core:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -14,6 +16,6 @@ jobs:
             node_modules
             packages/core/node_modules
           key: ${{ runner.os }}-${{ hashFiles('**/yarn.lock') }}
-      - run: make test
+      - run: make publish
         env:
-          CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}

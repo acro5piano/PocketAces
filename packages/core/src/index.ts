@@ -1,2 +1,2 @@
 import './bootstrap'
-export { PocketAces } from 'src/PocketAces'
+export { PocketAces } from './PocketAces'

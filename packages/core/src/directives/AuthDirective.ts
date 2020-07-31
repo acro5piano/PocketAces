@@ -1,5 +1,5 @@
 import { GraphQLError } from 'graphql'
-import { DirectiveProps } from 'src/contracts/DirectiveContract'
+import type { DirectiveProps } from '../contracts/DirectiveContract'
 
 export default async function auth({
   inferredTableName,

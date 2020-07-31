@@ -1,9 +1,9 @@
 import { Container } from 'typedi'
-import { showBoxMessage } from 'src/utils'
-import { HttpService } from 'src/services/HttpService'
-import { GraphQLService } from 'src/services/GraphQLService'
-import { ConfigService } from 'src/services/ConfigService'
-import { DatabaseService } from 'src/services/DatabaseService'
+import { showBoxMessage } from './utils'
+import { HttpService } from './services/HttpService'
+import { GraphQLService } from './services/GraphQLService'
+import { ConfigService } from './services/ConfigService'
+import { DatabaseService } from './services/DatabaseService'
 
 export class PocketAces {
   get http() {

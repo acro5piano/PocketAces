@@ -1,5 +1,5 @@
-import { omit } from 'src/utils'
-import { DirectiveProps } from 'src/contracts/DirectiveContract'
+import { omit } from '../utils'
+import type { DirectiveProps } from '../contracts/DirectiveContract'
 
 export default function scope({
   queryChain,

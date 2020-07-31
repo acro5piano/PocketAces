@@ -1,5 +1,5 @@
-import { joinKeyFromTable } from 'src/database/Convension'
-import { DirectiveProps } from 'src/contracts/DirectiveContract'
+import { joinKeyFromTable } from '../database/Convension'
+import type { DirectiveProps } from '../contracts/DirectiveContract'
 
 // TODO: currently happening N+1 problem!
 export default function hasMany({

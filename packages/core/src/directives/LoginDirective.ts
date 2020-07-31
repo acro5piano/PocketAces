@@ -1,6 +1,6 @@
-import * as Auth from 'src/auth/Auth'
+import * as Auth from '../auth/Auth'
 
-import { DirectiveProps } from 'src/contracts/DirectiveContract'
+import type { DirectiveProps } from '../contracts/DirectiveContract'
 
 interface DirectiveArgs {
   table: string

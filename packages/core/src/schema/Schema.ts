@@ -1,7 +1,7 @@
-import { DatabaseService } from 'src/services/DatabaseService'
-import { typeToTable } from 'src/database/Convension'
+import { DatabaseService } from '../services/DatabaseService'
+import { typeToTable } from '../database/Convension'
 import { Service, Inject } from 'typedi'
-import { ReloationLoader } from 'src/database/ReloationLoader'
+import { ReloationLoader } from '../database/ReloationLoader'
 import {
   parse,
   graphql,
@@ -30,10 +30,10 @@ import {
 import { TypeRegistry } from './TypeRegistry'
 import { Resolver, ResolverRegistry } from './ResolverRegistry'
 import { DirectiveRegistry } from './DirectiveRegistry'
-import { debug } from 'src/utils'
-import { Directive } from 'src/contracts/DirectiveContract'
-import { PrimitiveTypeArray } from 'src/utils'
-import { AuthContext } from 'src/auth/AuthContext'
+import { debug } from '../utils'
+import { Directive } from '../contracts/DirectiveContract'
+import { PrimitiveTypeArray } from '../utils'
+import { AuthContext } from '../auth/AuthContext'
 import { Request } from 'koa'
 
 type AnyGraphQLFieldConfig = GraphQLFieldConfig<any, any>
