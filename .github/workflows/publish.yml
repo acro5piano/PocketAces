@@ -1,7 +1,7 @@
 name: publish
 on:
-  release:
-    types: [published]
+  push:
+    branches: master
 jobs:
   publish-core:
     runs-on: ubuntu-latest
