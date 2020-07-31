@@ -1,4 +1,4 @@
-import type { Directive } from '../contracts/DirectiveContract'
+import { Directive } from '../contracts/DirectiveContract'
 
 import AllDirective from '../directives/AllDirective'
 import AuthDirective from '../directives/AuthDirective'

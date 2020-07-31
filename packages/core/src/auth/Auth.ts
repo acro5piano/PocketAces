@@ -1,6 +1,6 @@
 import { compare, hash } from 'bcrypt'
 import { sign, verify } from 'jsonwebtoken'
-import type { JwtPayload } from './AuthContext'
+import { JwtPayload } from './AuthContext'
 
 export function getSecret() {
   const maybeSecret = process.env.POCKET_ACE_JWT_SECRET

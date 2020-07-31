@@ -3,7 +3,7 @@ install:
 	yarn lerna bootstrap
 
 test: install
-	yarn lerna run tsc
+	yarn lerna exec tsc
 	mkdir coverage || true
 	yarn lerna run test:coverage
 	test -n "$$CODECOV_TOKEN"

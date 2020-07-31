@@ -1,4 +1,4 @@
-import type { DatabaseService } from '../services/DatabaseService'
+import { DatabaseService } from '../services/DatabaseService'
 import { Service, Inject } from 'typedi'
 import DataLoader from 'dataloader'
 

@@ -1,5 +1,5 @@
 import { Inject, Service } from 'typedi'
-import type { Schema } from '../schema'
+import { Schema } from '../schema'
 import { Resolver } from '../schema/ResolverRegistry'
 import { Directive } from '../contracts/DirectiveContract'
 

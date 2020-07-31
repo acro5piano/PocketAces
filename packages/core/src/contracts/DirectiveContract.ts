@@ -4,8 +4,8 @@ import {
   GraphQLResolveInfo,
 } from 'graphql'
 import Knex from 'knex'
-import type { AuthContext } from '../auth/AuthContext'
-import type { ReloationLoader } from '../database/ReloationLoader'
+import { AuthContext } from '../auth/AuthContext'
+import { ReloationLoader } from '../database/ReloationLoader'
 
 export interface DirectiveExecutionArgs<
   TArgs = any,
