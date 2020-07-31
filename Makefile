@@ -7,7 +7,7 @@ test: install
 	mkdir coverage || true
 	yarn lerna run test:coverage
 	test -n "$$CODECOV_TOKEN"
-	cd packages/core && bash <(curl -s https://codecov.io/bash)
+	cd packages/core && curl -s https://codecov.io/bash | bash
 
 prepublish:
 	test -n "$$NPM_TOKEN"
