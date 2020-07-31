@@ -1,16 +1,16 @@
-import { Directive } from 'src/contracts/DirectiveContract'
+import { Directive } from '../contracts/DirectiveContract'
 
-import AllDirective from 'src/directives/AllDirective'
-import AuthDirective from 'src/directives/AuthDirective'
-import CanDirective from 'src/directives/CanDirective'
-import CreateDirective from 'src/directives/CreateDirective'
-import HasManyDirective from 'src/directives/HasManyDirective'
-import FindDirective from 'src/directives/FindDirective'
-import LogDirective from 'src/directives/LogDirective'
-import LoginDirective from 'src/directives/LoginDirective'
-import ScopeDirective from 'src/directives/ScopeDirective'
-import UpdateDirective from 'src/directives/UpdateDirective'
-import WhereDirective from 'src/directives/WhereDirective'
+import AllDirective from '../directives/AllDirective'
+import AuthDirective from '../directives/AuthDirective'
+import CanDirective from '../directives/CanDirective'
+import CreateDirective from '../directives/CreateDirective'
+import HasManyDirective from '../directives/HasManyDirective'
+import FindDirective from '../directives/FindDirective'
+import LogDirective from '../directives/LogDirective'
+import LoginDirective from '../directives/LoginDirective'
+import ScopeDirective from '../directives/ScopeDirective'
+import UpdateDirective from '../directives/UpdateDirective'
+import WhereDirective from '../directives/WhereDirective'
 
 const builtinDirectives = [
   AllDirective,

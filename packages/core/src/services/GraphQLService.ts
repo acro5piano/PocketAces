@@ -1,7 +1,7 @@
 import { Inject, Service } from 'typedi'
-import { Schema } from 'src/schema'
-import { Resolver } from 'src/schema/ResolverRegistry'
-import { Directive } from 'src/contracts/DirectiveContract'
+import { Schema } from '../schema'
+import { Resolver } from '../schema/ResolverRegistry'
+import { Directive } from '../contracts/DirectiveContract'
 
 @Service()
 export class GraphQLService {

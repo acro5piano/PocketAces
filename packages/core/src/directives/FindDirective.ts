@@ -1,4 +1,4 @@
-import { DirectiveProps } from 'src/contracts/DirectiveContract'
+import { DirectiveProps } from '../contracts/DirectiveContract'
 
 export default function find({
   inputArgs,

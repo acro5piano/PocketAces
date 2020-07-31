@@ -1,5 +1,5 @@
-import { pick } from 'src/utils'
-import { DirectiveProps } from 'src/contracts/DirectiveContract'
+import { pick } from '../utils'
+import { DirectiveProps } from '../contracts/DirectiveContract'
 
 export default async function where({
   inputArgs,
