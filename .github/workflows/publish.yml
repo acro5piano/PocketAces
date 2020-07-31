@@ -1,7 +1,7 @@
 name: publish
 on:
   push:
-    branches: master
+    branches: release
 jobs:
   publish-core:
     runs-on: ubuntu-latest
@@ -16,6 +16,30 @@ jobs:
             node_modules
             packages/core/node_modules
           key: ${{ runner.os }}-${{ hashFiles('**/yarn.lock') }}
+
+      # First, publish new version to NPM
       - run: make publish
         env:
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+
+      # Get next version
+      - run: echo "::set-output name=result::`yarn lerna list -l | grep @pocket-aces/core | awk '{ print $2 }'`"
+        id: get_version
+      - run: echo ${{ steps.get_version.outputs.result }}
+
+      # Get latest commit
+      - run: echo "::set-output name=result::`git show --format=%B`"
+        id: get_release_body
+      - run: echo ${{ steps.get_release_body.outputs.result }}
+
+      - name: Create Release
+        id: create_release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # This token is provided by Actions, you do not need to create your own token
+        with:
+          tag_name: ${{ steps.get_version.outputs.result }}
+          release_name: Release ${{ steps.get_version.outputs.result }}
+          body: ${{ steps.get_release_body.outputs.result }}
+          draft: false
+          prerelease: false
