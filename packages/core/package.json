@@ -1,6 +1,6 @@
 {
   "name": "@pocket-aces/core",
-  "version": "0.0.8",
+  "version": "0.0.9",
   "license": "Apache-2.0",
   "main": "build/index.js",
   "jsnext:main": "build/index.es.js",
