@@ -16,6 +16,7 @@ import {
   GraphQLType,
   GraphQLNonNull,
   GraphQLFieldConfig,
+  GraphQLInterfaceType,
   GraphQLList,
   GraphQLSchema,
   GraphQLString,
@@ -205,11 +206,11 @@ export class Schema {
       parentValue: P,
       inputArgs: T,
       context: GraphQLContext,
-      resolveInfo: GraphQLResolveInfo,
+      resolveInfo: GraphQLResolveInfo & GraphQLInterfaceType,
     ) => {
       let value = null
       if (specifiedResolver) {
-        value = specifiedResolver(parentValue, null, inputArgs, null as any)
+        value = specifiedResolver(parentValue, inputArgs, context, resolveInfo)
       }
 
       return directiveWithArgs.reduce(
