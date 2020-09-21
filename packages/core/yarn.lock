@@ -2725,9 +2725,9 @@ kind-of@^6.0.0, kind-of@^6.0.2:
   integrity sha512-dcS1ul+9tmeD95T+x28/ehLgd9mENa3LsvDTtzm3vyBEO7RPptvAD+t44WVXaUjTBRcrpFeFlC8WCruUR456hw==
 
 knex-stringcase@^1.4.1:
-  version "1.4.2"
-  resolved "https://registry.yarnpkg.com/knex-stringcase/-/knex-stringcase-1.4.2.tgz#7b1e258b874c1fd42416355680153fd07582fe9e"
-  integrity sha512-LxDAFnQhXT4JVyVs95Xk8nl/MLmMM1+adgJPKAhZZEC2Lr1EHYmffkLdc4knF3fOyhTO2kjqdiFMKBxPwNvXpQ==
+  version "1.4.3"
+  resolved "https://registry.yarnpkg.com/knex-stringcase/-/knex-stringcase-1.4.3.tgz#c9ba6ce3d3fe5cff04f86c72725dfd867816cd1b"
+  integrity sha512-EN8kWZ8kGUA2L2isx/3xpvBF7y0rsH5FuOCKRNbd/KQ/x1/eF+v/mXIH6Yn84evKxq9tb0ZZ6gB2XBYjw8IyPA==
   dependencies:
     stringcase "^4.3.1"
 
