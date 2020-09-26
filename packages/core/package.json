@@ -46,7 +46,7 @@
     "rollup": "^2.9.1",
     "rollup-plugin-typescript2": "^0.27.0",
     "sqlite3": "^5.0.0",
-    "supertest": "^4.0.2",
+    "supertest": "^5.0.0",
     "ts-node": "^9.0.0",
     "tsconfig-paths": "^3.9.0",
     "typescript": "^4.0.2"
